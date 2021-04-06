@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Souls of the Titanic</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+  </head>
+  <body style="background-color: #fbf5ee;">
+      <circle style="fill: #69b3a2" stroke="black" cx=100 cy=100 r=40></circle>
+    <p>Souls of the Titanic</p>
+    <!-- <svg> 
+        <circle class="target" style="fill: #69b3a2" stroke="black" cx=50 cy=50 r=40></circle>
+    </svg> -->
+    <div id='area'></div>
+  
+
+    <script>
+        const margin = {top: 10, right: 10, bottom: 30, left: 50},
+            width = 800 - margin.left - margin.right,
+            height = 700 - margin.top - margin.bottom;
+            squareSize = 12;
+            strokeWidth = 0;
+            numSoulRow = 53;
+            blue = '#aec6cf';
+            darkblue = '#779ecb';
+        const colorMap = {
+            '1': '#B9C7C5',
+            '2': '#C8B794',
+            '3': '#8A98A3',
+            'Crew': '#BE8275'
+        }
+
+        var row = d3.scaleLinear()
+            .domain([0, numSoulRow])
+            .range([0, width]); 
+
+        var svg = d3.select("#area")
+            .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+                .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")")
+            
+
+          function render() {
+            d3.csv("data/titanic.csv").then(function(data) {
+                // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
+                svg.selectAll("rect")
+                    .data(data)
+                    .enter()
+                    .append('rect')
+                    .attr('x', (d, i) => {
+                        const n = i % numSoulRow;
+                        console.log(row(n))
+                        return row(n)
+                    })
+                    .attr('y', (d, i) => {
+                        const n = Math.floor(i / numSoulRow);
+                        return row(n)
+                    })
+                    .attr('rx', 3)
+                    .attr('ry', 3)
+                    .attr('width', squareSize)
+                    .attr('height', squareSize)
+                    .attr('stroke-width', strokeWidth)
+                    .attr('stroke', 'white')
+                    .attr('fill', function(d){return colorMap[d.Class]})
+                    .on('mouseover', handleMouseOver)
+                    .on('mouseout', handleMouseOut);
+                    console.log(data)
+
+                function handleMouseOver(d) {
+                    d3.select(this).style('fill', function(d){return colorMap[d.Class]});
+                    d3.select(this).style('opacity', .5);
+                }
+                function handleMouseOut(d) {
+                    d3.select(this).style('fill', function(d){return colorMap[d.Class]});
+                    d3.select(this).style('opacity', 1)
+                }
+            }) 
+
+          }
+
+          render();
+    
+        // d3
+        // .select(".target")  // select the elements that have the class 'target'
+        // .style("stroke-width", 8)
+          
+      </script>
+
+
+</body>
+
+  
+</html>
