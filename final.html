@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Souls of the Titanic</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;500;700&family=Limelight&display=swap" rel="stylesheet">
+  </head>
+  <body style="background-color: black";>
+      <circle style="fill:whitesmoke" stroke="black" cx=100 cy=100 r=40></circle>
+  
+    <div style="margin-left: 50px;">
+        <h1 id=title style="margin-top: 30px;">Souls of the Titanic</h1>
+        <h3 id=title_died></h3>
+        <div id='final_died'></div>
+        <h3 id=title_survived></h3>
+        <div id='final_survived'></div>
+    </div>
+
+    <script>
+        const margin = {top: 0, right: 30, bottom: 10, left: 0},
+            width_died = 920 - margin.left - margin.right,
+            height_died = 550 - margin.top - margin.bottom;
+            width_survived = 920 - margin.left - margin.right,
+            height_survived = 300 - margin.top - margin.bottom;
+            squareSize = 15;
+            strokeWidth = 0;
+            numSoulRow = 50;
+
+            //Square and Highlight Colors
+            squareColor = "whitesmoke"
+            diedHighlightColor = "grey"
+            survivedHighlightColor = "grey"
+
+        const colorMap = {
+            '1': '#B9C7C5',
+            '2': '#C8B794',
+            '3': '#8A98A3',
+            'Crew': '#BE8275'
+        }
+
+        var row = d3.scaleLinear()
+            .domain([0, numSoulRow])
+            .range([0, width_died]); 
+
+        var title_died = d3.select("#title_died")
+        var title_survived = d3.select("#title_survived")
+
+        var svg_died = d3.select("#final_died")
+            .append("svg")
+                .attr("width", width_died + margin.left + margin.right)
+                .attr("height", height_died + margin.top + margin.bottom)
+            .append("g")
+                .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")")
+        
+        var svg_survived = d3.select("#final_survived")
+            .append("svg")
+                .attr("width", width_survived + margin.left + margin.right)
+                .attr("height", height_survived + margin.top + margin.bottom)
+            .append("g")
+                .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")")
+     
+        var tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);       
+
+          function render() {
+
+            // Died Grid
+            d3.csv("data/titanic.csv").then(function(data) {
+                died = data.filter(d => d.Survived === "Dead")
+                // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
+                title_died.text(`${died.length.toString()} Souls, ${(died.length*100/1496).toString()}% of Total Victims`)
+
+                svg_died.selectAll("rect")
+                    .data(died)
+                    .enter()
+                    .append('rect')
+                    .attr('x', (d, i) => {
+                        const n = i % numSoulRow;
+                        console.log(row(n))
+                        return row(n)
+                    })
+                    .attr('y', (d, i) => {
+                        const n = Math.floor(i / numSoulRow);
+                        return row(n)
+                    })
+                    .attr('rx', 3)
+                    .attr('ry', 3)
+                    .attr('width', squareSize)
+                    .attr('height', squareSize)
+                    .attr('stroke-width', strokeWidth)
+                    .attr('stroke', squareColor)
+                    .attr('fill', squareColor)
+                    .on('mouseover', handleMouseOver)
+                    .on('mouseout', handleMouseOut);
+
+                function handleMouseOver(d) {
+                    d3.select(this).style('fill', diedHighlightColor);
+                    d3.select(this).style('opacity', .5);
+
+                    // tooltip
+                    tooltip.transition()
+                        .duration(30)
+                        .style("opacity", 1)
+                    tooltip.html(`${d.Title} ${d.FirstName} ${d.LastName}, ${parseInt(d.Age)}${d.Job? ", " + d.Job: ""}<br><div class='tooltip-more'> Click to learn more </div>`)
+                        .style("left", (d3.event.pageX + 20) + "px")
+                        .style("top", (d3.event.pageY - 20) + "px");
+                    d3.select(this).attr("class", "info").datum(d).style("cursor", "pointer");
+                }
+                function handleMouseOut(d) {
+                    d3.select(this).style('fill', squareColor);
+                    d3.select(this).style('opacity', 1)
+
+                    // tooltip
+                    tooltip.transition()
+                        .duration(30)
+                        .style("opacity", 0);
+                    d3.select(this).attr("class", null)
+                }
+            }) 
+            
+            // Survived Grid
+            d3.csv("data/titanic.csv").then(function(data) {
+                survived = data.filter(d => d.Survived === "Alive")
+                // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
+                title_survived.text(`${survived.length.toString()} Souls, ${(survived.length*100/712).toString()}% of Total Survivors`)
+
+                svg_survived.selectAll("rect")
+                    .data(survived)
+                    .enter()
+                    .append('rect')
+                    .attr('x', (d, i) => {
+                        const n = i % numSoulRow;
+                        console.log(row(n))
+                        return row(n)
+                    })
+                    .attr('y', (d, i) => {
+                        const n = Math.floor(i / numSoulRow);
+                        return row(n)
+                    })
+                    .attr('rx', 3)
+                    .attr('ry', 3)
+                    .attr('width', squareSize)
+                    .attr('height', squareSize)
+                    .attr('stroke-width', strokeWidth)
+                    .attr('stroke', squareColor)
+                    .attr('fill', squareColor)
+                    .on('mouseover', handleMouseOver)
+                    .on('mouseout', handleMouseOut);
+
+                function handleMouseOver(d) {
+                    d3.select(this).style('fill', survivedHighlightColor);
+                    d3.select(this).style('opacity', .5);
+
+                    // tooltip
+                    tooltip.transition()
+                        .duration(30)
+                        .style("opacity", 1)
+                    tooltip.html(`${d.Title} ${d.FirstName} ${d.LastName}, ${parseInt(d.Age)}${d.Job? ", " + d.Job: ""}<br><div class='tooltip-more'> Click to learn more </div>`)
+                        .style("left", (d3.event.pageX + 20) + "px")
+                        .style("top", (d3.event.pageY - 20) + "px");
+                    d3.select(this).attr("class", "info").datum(d).style("cursor", "pointer");
+                }
+                function handleMouseOut(d) {
+                    d3.select(this).style('fill', squareColor);
+                    d3.select(this).style('opacity', 1)
+
+                    // tooltip
+                    tooltip.transition()
+                        .duration(30)
+                        .style("opacity", 0);
+                    d3.select(this).attr("class", null)
+                }
+            }) 
+
+          }
+
+          render();
+    
+        // d3
+        // .select(".target")  // select the elements that have the class 'target'
+        // .style("stroke-width", 8)
+          
+      </script>
+
+
+</body>
+
+  
+</html>

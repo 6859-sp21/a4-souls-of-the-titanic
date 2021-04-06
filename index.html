@@ -4,19 +4,19 @@
     <title>Souls of the Titanic</title>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;500;700&family=Limelight&display=swap" rel="stylesheet">
   </head>
   <body style="background-color:whitesmoke;">
       <circle style="fill: #69b3a2" stroke="black" cx=100 cy=100 r=40></circle>
-    <h1>Souls of the Titanic</h1>
-    <!-- <svg> 
-        <circle class="target" style="fill: #69b3a2" stroke="black" cx=50 cy=50 r=40></circle>
-    </svg> -->
-    <div id='area'></div>
-  
+
+    <div style="margin-top: 50px; margin-left: 50px;">
+        <h1 id=title style="color:black;">Souls of the Titanic</h1>
+        <div id='area'></div>
+    </div>
 
     <script>
-        const margin = {top: 10, right: 10, bottom: 30, left: 30},
+        const margin = {top: 10, right: 10, bottom: 30, left: 0},
             width = 920 - margin.left - margin.right,
             height = 800 - margin.top - margin.bottom;
             squareSize = 15;

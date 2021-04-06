@@ -1,8 +1,21 @@
-h1 {
-    color: black;
+h1#title {
     font-size: 50px;
-    margin: 30px;
     font-family: 'Limelight', cursive;
+    color:white;
+}
+
+h3#title_died {
+    color:whitesmoke;
+    font-size: 25px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 500;
+}
+
+h3#title_survived {
+    color:whitesmoke;
+    font-size: 25px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 500;
 }
 
 div.tooltip {	
@@ -16,7 +29,7 @@ div.tooltip {
     font-size: 20px;	
 
     background: white;	
-    border-radius: 7px;			
+    border-radius: 7px;		
     pointer-events: none;	
     box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
     font-family: 'Josefin Sans', sans-serif;
