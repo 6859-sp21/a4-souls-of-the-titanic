@@ -44,9 +44,15 @@
             .domain([0, numSoulRow])
             .range([0, width_died]); 
 
-        var title_died = d3.select("#title_died")
-        var title_survived = d3.select("#title_survived")
+        //Filter JSON
+        var filters = {
+            gender: [],
+            class: [],
+            age: []
+        }
 
+        //Died Grid Dimensions
+        var title_died = d3.select("#title_died")
         var svg_died = d3.select("#final_died")
             .append("svg")
                 .attr("width", width_died + margin.left + margin.right)
@@ -55,6 +61,8 @@
                 .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")")
         
+        //Survived Grid Dimensions
+        var title_survived = d3.select("#title_survived")
         var svg_survived = d3.select("#final_survived")
             .append("svg")
                 .attr("width", width_survived + margin.left + margin.right)
@@ -67,13 +75,21 @@
             .attr("class", "tooltip")
             .style("opacity", 0);       
 
+        // Filter and Update Data
+        function filter(data){
+            sorted_data = data.sort((d1, d2) => (parseInt(d1.Age) > parseInt(d2.Age)) ? 1 : -1);
+            return sorted_data
+        }
+
+        // Render Grids
           function render() {
 
-            // Died Grid
             d3.csv("data/titanic.csv").then(function(data) {
+                data = filter(data)
+
+                // Died Grid
                 died = data.filter(d => d.Survived === "Dead")
-                // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
-                title_died.text(`${died.length.toString()} Souls, ${(died.length*100/1496).toString()}% of Total Victims`)
+                title_died.text(`${died.length.toString()} Souls, ${(died.length*100/1496).toFixed(1).toString()}% of Total Victims`)
 
                 svg_died.selectAll("rect")
                     .data(died)
@@ -81,7 +97,6 @@
                     .append('rect')
                     .attr('x', (d, i) => {
                         const n = i % numSoulRow;
-                        console.log(row(n))
                         return row(n)
                     })
                     .attr('y', (d, i) => {
@@ -96,8 +111,38 @@
                     .attr('stroke', squareColor)
                     .attr('fill', squareColor)
                     .on('mouseover', handleMouseOver)
-                    .on('mouseout', handleMouseOut);
+                    .on('mouseout', handleMouseOut)
+                    .on('click', handleClick);
+                
+                // Survived Grid
+                survived = data.filter(d => d.Survived === "Alive")
+                title_survived.text(`${survived.length.toString()} Souls, ${(survived.length*100/712).toString()}% of Total Survivors`)
 
+                svg_survived.selectAll("rect")
+                    .data(survived)
+                    .enter()
+                    .append('rect')
+                    .attr('x', (d, i) => {
+                        const n = i % numSoulRow;
+                        return row(n)
+                    })
+                    .attr('y', (d, i) => {
+                        const n = Math.floor(i / numSoulRow);
+                        return row(n)
+                    })
+                    .attr('rx', 3)
+                    .attr('ry', 3)
+                    .attr('width', squareSize)
+                    .attr('height', squareSize)
+                    .attr('stroke-width', strokeWidth)
+                    .attr('stroke', squareColor)
+                    .attr('fill', squareColor)
+                    .on('mouseover', handleMouseOver)
+                    .on('mouseout', handleMouseOut)
+                    .on('click', handleClick);
+
+
+                // MouseOvers
                 function handleMouseOver(d) {
                     d3.select(this).style('fill', diedHighlightColor);
                     d3.select(this).style('opacity', .5);
@@ -121,62 +166,28 @@
                         .style("opacity", 0);
                     d3.select(this).attr("class", null)
                 }
-            }) 
-            
-            // Survived Grid
-            d3.csv("data/titanic.csv").then(function(data) {
-                survived = data.filter(d => d.Survived === "Alive")
-                // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
-                title_survived.text(`${survived.length.toString()} Souls, ${(survived.length*100/712).toString()}% of Total Survivors`)
 
-                svg_survived.selectAll("rect")
-                    .data(survived)
-                    .enter()
-                    .append('rect')
-                    .attr('x', (d, i) => {
-                        const n = i % numSoulRow;
-                        console.log(row(n))
-                        return row(n)
-                    })
-                    .attr('y', (d, i) => {
-                        const n = Math.floor(i / numSoulRow);
-                        return row(n)
-                    })
-                    .attr('rx', 3)
-                    .attr('ry', 3)
-                    .attr('width', squareSize)
-                    .attr('height', squareSize)
-                    .attr('stroke-width', strokeWidth)
-                    .attr('stroke', squareColor)
-                    .attr('fill', squareColor)
-                    .on('mouseover', handleMouseOver)
-                    .on('mouseout', handleMouseOut);
-
-                function handleMouseOver(d) {
-                    d3.select(this).style('fill', survivedHighlightColor);
-                    d3.select(this).style('opacity', .5);
-
-                    // tooltip
-                    tooltip.transition()
-                        .duration(30)
-                        .style("opacity", 1)
-                    tooltip.html(`${d.Title} ${d.FirstName} ${d.LastName}, ${parseInt(d.Age)}${d.Job? ", " + d.Job: ""}<br><div class='tooltip-more'> Click to learn more </div>`)
-                        .style("left", (d3.event.pageX + 20) + "px")
-                        .style("top", (d3.event.pageY - 20) + "px");
-                    d3.select(this).attr("class", "info").datum(d).style("cursor", "pointer");
+                //Handle Click, need to implement the modal
+                function handleClick(){
+                    highlight();
+                    title_survived.text(`Change Title`).transition().duration(1000);
                 }
-                function handleMouseOut(d) {
-                    d3.select(this).style('fill', squareColor);
-                    d3.select(this).style('opacity', 1)
 
-                    // tooltip
-                    tooltip.transition()
-                        .duration(30)
-                        .style("opacity", 0);
-                    d3.select(this).attr("class", null)
+                //Highlighting Boxes
+                function highlight() {
+                    console.log("hello");
+                    d3.selectAll("rect").attr("class", function (d) {
+                        return (d.Title == "Miss" ? "is-active" : "is-inactive");
+                    });
                 }
-            }) 
 
+                function unhighlight() {
+                    d3.selectAll("rect").attr("class", function (d) {
+                        return d.predicted_category + " " + "is-active";
+                    });
+                }
+
+            }) 
           }
 
           render();

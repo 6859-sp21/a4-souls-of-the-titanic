@@ -41,3 +41,11 @@ div.tooltip {
     font-family: 'Josefin Sans', sans-serif;
     font-weight: 300;
 }
+
+.is-active {
+    color: turquoise;
+    opacity: 100%;
+  }
+.is-inactive {
+    opacity: 20%;
+}
