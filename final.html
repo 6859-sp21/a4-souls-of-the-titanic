@@ -309,9 +309,9 @@
                             <h1 id="modal_info">Age: ${d.Age}</h1>
                             <h1 id="modal_info">Class: ${d.Class_Dept}</h1>
                             <h1 id="modal_info">${d.Job? "Occupation: " + d.Job: ""}</h1>
-                            <h1 id="modal_info">Boarding Location: ${d.Boarded}</h1>`);
-                    
-                    
+                            <h1 id="modal_info">Boarding Location: ${d.Boarded}</h1>
+                            <br>
+                            <a href="https://www.encyclopedia-titanica.org/${d.Survived == "Alive"? "titanic-survivor": "titanic-victim"}/${d.FirstName.split(' ').join('-')}-${d.LastName}.html" class="button1">Find Me on Encyclopedia Titanica</a>`);    
                 }
 
                 function handleFilter(d){
