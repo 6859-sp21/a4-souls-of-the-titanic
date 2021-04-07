@@ -4,7 +4,11 @@
     <title>Souls of the Titanic</title>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;500;700&family=Limelight&display=swap" rel="stylesheet">
   </head>
   <body style="background-color: black";>
@@ -64,6 +68,9 @@
                 </label>
         </div>
     </div>  
+
+    <!-- Modal -->
+    <div id="myModal" style="border:2px solid whitesmoke; background-color: black" class="modal"></div>
 
     <script>
         const margin = {top: 0, right: 30, bottom: 10, left: 0},
@@ -231,7 +238,7 @@
                     .on('mouseout', handleMouseOut_survived)
                     .on('click', handleClick);
 
-                    handleClick()
+                    handleFilter()
 
 
                 // MouseOvers
@@ -277,7 +284,20 @@
                 
 
                 //Handle Click, need to implement the modal
-                function handleClick(){
+                function handleClick(d){
+                    $("#myModal").modal({fadeDuration: 300})
+                    .html(`<h1 id="modal_name">${d.Title} ${d.FirstName} ${d.LastName}</h1>
+                            <h1 id="modal_survived">${d.Survived== "Alive"? "Survived": "Died"}</h1>
+                            <h1 id="modal_info">Gender: ${d.Sex}</h1>
+                            <h1 id="modal_info">Age: ${d.Age}</h1>
+                            <h1 id="modal_info">Class: ${d.Class_Dept}</h1>
+                            <h1 id="modal_info">${d.Job? "Occupation: " + d.Job: ""}</h1>
+                            <h1 id="modal_info">Boarding Location: ${d.Boarded}</h1>`);
+                    
+                    
+                }
+
+                function handleFilter(d){
                     filtered_died = svg_died.selectAll("rect").filter(d => fitsFilter(d));
                     filtered_survived = svg_survived.selectAll("rect").filter(d => fitsFilter(d));
                     highlight(filtered_died, filtered_survived);
