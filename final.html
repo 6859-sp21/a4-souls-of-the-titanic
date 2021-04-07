@@ -93,7 +93,7 @@
             height_died = 700 - margin.top - margin.bottom;
             width_survived = 700 - margin.left - margin.right,
             height_survived = 300 - margin.top - margin.bottom;
-            squareSize = 14;
+            squareSize = 15;
             strokeWidth = 0;
             numSoulRow = 40;
 
@@ -304,14 +304,14 @@
                 function handleClick(d){
                     $("#myModal").modal({fadeDuration: 300})
                     .html(`<h1 id="modal_name">${d.Title} ${d.FirstName} ${d.LastName}</h1>
-                            <h1 id="modal_survived">${d.Survived== "Alive"? "Survived": "Died"}</h1>
+                            <h1 id="modal_survived"">${d.Survived== "Alive"? "Survived": "Died"}</h1>
                             <h1 id="modal_info">Gender: ${d.Sex}</h1>
                             <h1 id="modal_info">Age: ${d.Age}</h1>
                             <h1 id="modal_info">Class: ${d.Class_Dept}</h1>
                             <h1 id="modal_info">${d.Job? "Occupation: " + d.Job: ""}</h1>
                             <h1 id="modal_info">Boarding Location: ${d.Boarded}</h1>
                             <br>
-                            <a href="https://www.encyclopedia-titanica.org/${d.Survived == "Alive"? "titanic-survivor": "titanic-victim"}/${d.FirstName.split(' ').join('-')}-${d.LastName}.html" class="button1">Find Me on Encyclopedia Titanica</a>`);    
+                            <div style="text-align:center"><a href="https://www.encyclopedia-titanica.org/${d.Survived == "Alive"? "titanic-survivor": "titanic-victim"}/${d.FirstName.split(' ').join('-')}-${d.LastName}.html" class="button1">Find Me on Encyclopedia Titanica</a></div>`);    
                 }
 
                 function handleFilter(d){
@@ -328,10 +328,10 @@
                 }
                 //Highlighting Boxes
                 function highlight(filtered_died, filtered_survived) {
-                    filtered_died.transition().duration(50).delay(function (d, i) {
-                            return 2 + i;}).style("fill",diedColor).attr("id","is-active");
+                    filtered_died.transition().duration(100).delay(function (d, i) {
+                            return i;}).style("fill",diedColor).attr("id","is-active");
                     filtered_survived.transition().duration(100).delay(function (d, i) {
-                            return 10 + i;}).style("fill",survivedColor).attr("id","is-active");
+                            return i;}).style("fill",survivedColor).attr("id","is-active");
                 }
 
                 //TODO use unhighlight somewhere
