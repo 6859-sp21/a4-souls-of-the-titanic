@@ -3,6 +3,29 @@ h1#title {
     font-family: 'Limelight', cursive;
     color:white;
 }
+
+h1#modal_name {
+    font-size: 30px;
+    font-family: 'Limelight', cursive;
+    color:whitesmoke;
+    text-align: center;
+}
+
+h1#modal_survived {
+    font-size: 20px;
+    font-family: 'Limelight', cursive;
+    color:whitesmoke;
+    text-align: center;
+}
+
+h1#modal_info {
+    font-size: 20px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 500;
+    color:whitesmoke;
+    text-align: left;
+}
+
 h1#filter_category{
     font-size: 30px;
     font-family: 'Limelight', cursive;
