@@ -291,7 +291,7 @@
       
 
         function render1() {
-          d3.csv("../data/titanic.csv").then(function(data) {
+          d3.csv("./data/titanic.csv").then(function(data) {
               // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
               d3.select("#title_died1").text(`Titanic: 2208 Souls`);
 
@@ -455,7 +455,7 @@
       // Render Grids
         function render() {
 
-          d3.csv("../data/titanic.csv").then(function(data) {
+          d3.csv("./data/titanic.csv").then(function(data) {
               // data = filter(data)
               unhighlight()
               // console.log('good')
