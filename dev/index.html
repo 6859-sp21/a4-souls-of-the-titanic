@@ -66,7 +66,7 @@
 
       .step.is-active {
         background-color: whitesmoke;
-        color whitesmoke;
+        color: whitesmoke;
       }
 
       .step p {
@@ -106,7 +106,7 @@
         <figure>
           <h3 id=title_died style="color:white"></h3>
           <div id='area'></div>
-          <h3 id=title_survived style="margin-top:-330px; color:white"></h3>
+          <h3 id=title_survived style="margin-top:-480px; color:white"></h3>
         </figure>
       </section>
 
@@ -204,10 +204,11 @@
                   })
                   .attr('fill', 'white')
                   svg.selectAll("rect")
-                  died = data.filter(d => d.Survived === "Dead")
-                  d3.select("#title_died").text(`${died.length.toString()} Souls, ${(Math.round(died.length*100/2208)).toString()}% of All Passengers`)
-                    // survived = data.filter(d => d.Survived === "Alive")
-                    // title_survived.text(`${survived.length.toString()} Souls, ${(Math.round(survived.length*100/2208)).toString()}% of All Passengers)
+                  // died = data.filter(d => d.Survived === "Dead")
+                  died = 1496
+                  d3.select("#title_died").text(`Died: ${died.toString()} Souls, ${(Math.round(died*100/2208)).toString()}% of All Passengers`)
+                  survived = 712
+                  d3.select("#title_survived").text(`Survived: ${survived.toString()} Souls, ${(Math.round(survived*100/2208)).toString()}% of All Passengers`)
         // el.select(".progress").text(d3.format(".1%")(response.progress));
       }
 
@@ -239,7 +240,7 @@
 
       const margin = {top: 10, right: 10, bottom: 30, left: 0},
           width = 920 - margin.left - margin.right,
-          height = 900 - margin.top - margin.bottom;
+          height = 800 - margin.top - margin.bottom;
           squareSize = 12;
           strokeWidth = 0;
           numSoulRow = 67;
