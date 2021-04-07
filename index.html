@@ -12,13 +12,16 @@
 
     <div style="margin-top: 50px; margin-left: 50px;">
         <h1 id=title style="color:black;">Souls of the Titanic</h1>
+        <button id='transition'>Transition</button>
+        <h3 id=title_died style="color:black"></h3>
         <div id='area'></div>
+        <h3 id=title_survived style="margin-top:-330px; color:black"></h3>
     </div>
 
     <script>
         const margin = {top: 10, right: 10, bottom: 30, left: 0},
             width = 920 - margin.left - margin.right,
-            height = 800 - margin.top - margin.bottom;
+            height = 900 - margin.top - margin.bottom;
             squareSize = 15;
             strokeWidth = 0;
             numSoulRow = 50;
@@ -33,6 +36,9 @@
         var row = d3.scaleLinear()
             .domain([0, numSoulRow])
             .range([0, width]); 
+        
+        var title_died = d3.select("#title_died")
+        var title_survived = d3.select("#title_survived")
 
         var svg = d3.select("#area")
             .append("svg")
@@ -44,18 +50,19 @@
      
         var tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
-            .style("opacity", 0);       
+            .style("opacity", 0);
+            
+        
 
           function render() {
             d3.csv("data/titanic.csv").then(function(data) {
                 // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
-                svg.selectAll("rect")
+                souls = svg.selectAll("rect")
                     .data(data)
                     .enter()
                     .append('rect')
                     .attr('x', (d, i) => {
                         const n = i % numSoulRow;
-                        console.log(row(n))
                         return row(n)
                     })
                     .attr('y', (d, i) => {
@@ -72,6 +79,59 @@
                     .on('mouseover', handleMouseOver)
                     .on('mouseout', handleMouseOut);
                     console.log(data)
+
+                var dx_ind = 0;
+                var ax_ind = 0;
+                var dy_ind = 0;
+                var ay_ind = 0;
+
+                d3.select("#transition").on("click", function() {
+                    souls
+                    .transition()
+                    .duration(3000)
+                    .ease(d3.easeQuadIn) 
+                    .attr("x", (d, i) => {
+                        var n
+                        if (d.Survived === 'Dead'){
+                            n = dx_ind % numSoulRow;
+                            console.log('dd', dx_ind)
+                            dx_ind++
+
+                        }
+                        else {
+                            n = ax_ind % numSoulRow;
+                            console.log('a', ax_ind)
+                            ax_ind++;
+                        }
+
+                        return row(n);
+                        
+                    })
+                    .attr("y", (d, i) => {
+                        
+                        if (d.Survived === 'Dead'){
+                            const n = Math.floor(dy_ind / numSoulRow)
+                            console.log('d', dy_ind)
+                            dy_ind++
+                            return row(n)
+                        }
+                        else {
+                            const n = Math.floor(ay_ind / numSoulRow)
+                            console.log(ay_ind)
+                            ay_ind++
+                            return row(n) + 600
+                        }
+                        
+                        
+                    })
+                    .attr('fill', 'black')
+
+                    died = data.filter(d => d.Survived === "Dead")
+                    title_died.text(`${died.length.toString()} Souls, ${(Math.round(died.length*100/2208)).toString()}% of All Passengers`)
+                    survived = data.filter(d => d.Survived === "Alive")
+                    title_survived.text(`${survived.length.toString()} Souls, ${(Math.round(survived.length*100/2208)).toString()}% of All Passengers`)
+
+                });
 
                 function handleMouseOver(d) {
                     d3.select(this).style('fill', 'black');
