@@ -20,8 +20,48 @@
         </div>
         <div style="margin-left: 50px;margin-top: 20px;">
             <h1 id="filter_category">Gender</h1>
+                <label class="container">Male
+                    <input type="checkbox" id="Male" checked="check" onclick="updateFilter(); render();">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container">Female
+                    <input type="checkbox" id="Female" checked="check" onclick="updateFilter(); render();">
+                    <span class="checkmark"></span>
+                </label>
             <h1 id="filter_category">Class</h1>
+                <label class="container">1st Class
+                    <input type="checkbox" id="1" checked="check" onclick="updateFilter(); render();">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container">2nd Class
+                    <input type="checkbox" id="2" checked="check" onclick="updateFilter(); render();">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container">3rd Class
+                    <input type="checkbox" id="3" checked="check" onclick="updateFilter(); render();">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container">Crew
+                    <input type="checkbox" id="Crew" checked="check" onclick="updateFilter(); render();">
+                    <span class="checkmark"></span>
+                </label>
             <h1 id="filter_category">Age</h1>
+                <label class="container"> 0-17 Years
+                    <input type="checkbox" id="ageGroup1" checked="check" onclick="updateFilter(); render();">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container"> 18-35 Years
+                    <input type="checkbox" id="ageGroup2" checked="check" onclick="updateFilter(); render();">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container"> 35-50 Years
+                    <input type="checkbox" id="ageGroup3" checked="check" onclick="updateFilter(); render();">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container"> 50-75 Years
+                    <input type="checkbox" id="ageGroup4" checked="check" onclick="updateFilter(); render();">
+                    <span class="checkmark"></span>
+                </label>
         </div>
     </div>  
 
@@ -45,8 +85,8 @@
 
         //Filter JSON
         var filters = {
-            gender: ["Male"],
-            class: ["1", "2"],
+            gender: ["Male", "Female"],
+            class: ["1", "2", "3", "Crew"],
             age: [[0,17], [18,35], [35,50], [50,75]]
         }
 
@@ -75,22 +115,29 @@
             .style("opacity", 0);       
 
         // Filter and Update Data (TODO!)
-        function update_filter(){
+        function updateFilter(){
+            genderFilter = ["Male", "Female"]
+            classFilter = ["1", "2", "3", "Crew"]
+            ageFilter = ["ageGroup1", "ageGroup2", "ageGroup3", "ageGroup4"]
+            ageMap = {"ageGroup1":[0,17], "ageGroup2":[18,35], "ageGroup3":[35,50], "ageGroup4":[50,75]}
+
+            filters["gender"] = genderFilter.map(f => {if (document.getElementById(f).checked == true) return f});
+            console.log('filters', filters)
+            filters["class"] = classFilter.map(f => {if (document.getElementById(f).checked == true) return f});
+            filters["age"] = ageFilter.map(f => {if (document.getElementById(f).checked == true) return ageMap[f]});
+
             return filters
         }
 
         function filter(data, survived){
             survived_data = data.filter(d => d.Survived === survived)
-            filtered_data = survived_data.filter(d => fits_filter(d))
-            console.log(filtered_data)
+            filtered_data = survived_data.filter(d => fitsFilter(d))
             rest_of_data = survived_data.filter(d => !filtered_data.includes(d))
-            console.log('rest', rest_of_data)
 
             const all_data = []
             var i = 0
             for (key in filtered_data) {
                 if (filtered_data.hasOwnProperty(key)) {
-                    // console.log(key)
                     all_data[i] = filtered_data[key]
                     i++
                 }
@@ -103,15 +150,18 @@
             }
             return all_data
         }
-        function fits_filter(d){
+        function fitsFilter(d){
             return (filters["gender"].includes(d.Sex)
                 && filters["class"].includes(d.Class)
                 && inAgeRange(filters["age"], d.Age))
         }
         function inAgeRange(rangeList, age) {
+            console.log('rangeList', rangeList)
             for (var i=0; i<rangeList.length; i++) {
-                if (parseInt(age)>=rangeList[i][0] && parseInt(age)<=rangeList[i][1]){
-                    return true;
+                if (rangeList[i]) {
+                    if (parseInt(age)>=rangeList[i][0] && parseInt(age)<=rangeList[i][1]){
+                        return true;
+                    }
                 }
             }
             return false;
@@ -122,7 +172,9 @@
 
             d3.csv("data/titanic.csv").then(function(data) {
                 // data = filter(data)
-
+                unhighlight()
+                console.log('good')
+                
                 // Died Grid
                 died = filter(data, 'Dead')
                 title_died.text(`0 Souls, 0% of Total Victims`)
@@ -179,6 +231,8 @@
                     .on('mouseout', handleMouseOut_survived)
                     .on('click', handleClick);
 
+                    handleClick()
+
 
                 // MouseOvers
                 function handleMouseOver(d) {
@@ -224,8 +278,8 @@
 
                 //Handle Click, need to implement the modal
                 function handleClick(){
-                    filtered_died = svg_died.selectAll("rect").filter(d => fits_filter(d));
-                    filtered_survived = svg_survived.selectAll("rect").filter(d => fits_filter(d));
+                    filtered_died = svg_died.selectAll("rect").filter(d => fitsFilter(d));
+                    filtered_survived = svg_survived.selectAll("rect").filter(d => fitsFilter(d));
                     highlight(filtered_died, filtered_survived);
                     update_title(filtered_died, filtered_survived);
                 }
@@ -243,9 +297,7 @@
 
                 //TODO use unhighlight somewhere
                 function unhighlight() {
-                    d3.selectAll("rect").attr("id", function (d) {
-                        return "";
-                    });
+                    d3.selectAll("rect").remove()
                 }
 
                 
