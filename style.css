@@ -3,6 +3,11 @@ h1#title {
     font-family: 'Limelight', cursive;
     color:white;
 }
+h1#filter_category{
+    font-size: 30px;
+    font-family: 'Limelight', cursive;
+    color:white;
+}
 
 h3#title_died {
     color:whitesmoke;
