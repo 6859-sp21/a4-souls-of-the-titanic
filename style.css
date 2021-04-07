@@ -133,7 +133,6 @@ a:hover {
 #intro {
   height: 50rem;
   text-align: center;
-  background-image: url("../titanic.jpeg");
   background-size: cover;
 }
 
