@@ -13,7 +13,7 @@
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        background-color: hsl(0, 0%, 95%);
+        background-color: black;
         padding: 1rem;
       }
 
@@ -30,7 +30,6 @@
       }
 
       figure {
-        position: -webkit-sticky;
         position: sticky;
         width: 100%;
         margin: 0;
@@ -67,8 +66,8 @@
       }
 
       .step.is-active {
-        background-color: goldenrod;
-        color: #3b3b3b;
+        background-color: whitesmoke;
+        color whitesmoke;
       }
 
       .step p {
@@ -92,29 +91,30 @@
       <section id="scrolly">
         <article>
           <div class="step" data-step="1">
-            <p>STEP 1</p>
-            <p class="progress">0%</p>
+            <p class="progress"> Each square represents a passenger on the Titanic. Hover over each square to learn more about each passenger.</p>
           </div>
           <div class="step" data-step="2">
-            <p>STEP 2</p>
-            <p class="progress">0%</p>
+            <p class="progress">Two-thirds of the passenger passed away on the Unsinkable Titanic. </p>
           </div>
           <div class="step" data-step="3">
-            <p>STEP 3</p>
-            <p class="progress">0%</p>
+            <p class="progress">Women made up 50% of the survivors, while only 8.7% of the victims.  </p>
           </div>
           <div class="step" data-step="4">
-            <p>STEP 4</p>
-            <p class="progress">0%</p>
+            <p class="progress">Passengers traveling first class on Titanic were roughly 44 percent more likely to survive than other passengers.</p>
           </div>
         </article>
 
         <figure>
-          <p>0</p>
+          <h3 id=title_died style="color:black"></h3>
+          <div id='area'></div>
+          <h3 id=title_survived style="margin-top:-330px; color:black"></h3>
         </figure>
       </section>
 
-      <section id="outro"></section>
+      <section id="outro">
+        <p> </p>
+        <a href="../final.html"  > Explore the data more here</a>
+      </section>
     </main>
 
     <script src="https://unpkg.com/d3@5.9.1/dist/d3.min.js"></script>
@@ -158,14 +158,53 @@
           return i === response.index;
         });
 
-        // update graphic based on step
-        figure.select("p").text(response.index + 1);
       }
 
       function handleStepProgress(response) {
-        var el = d3.select(response.element);
+        // var el = d3.select(response.element);
+        var dx_ind = 0;
+              var ax_ind = 0;
+              var dy_ind = 0;
+              var ay_ind = 0;
+              
+              svg.selectAll("rect")
+                  .transition()
+                  .duration(2000)
+                  .ease(d3.easeQuadIn) 
+                  .attr("x", (d, i) => {
+                      var n
+                      if (d.Survived === 'Dead'){
+                          n = dx_ind % numSoulRow;
+                          console.log('dd', dx_ind)
+                          dx_ind++
 
-        el.select(".progress").text(d3.format(".1%")(response.progress));
+                      }
+                      else {
+                          n = ax_ind % numSoulRow;
+                          console.log('a', ax_ind)
+                          ax_ind++;
+                      }
+
+                      return row(n);
+                      
+                  })
+                  .attr("y", (d, i) => {
+                      if (d.Survived === 'Dead'){
+                          const n = Math.floor(dy_ind / numSoulRow)
+                          console.log('d', dy_ind)
+                          dy_ind++
+                          return row(n)
+                      }
+                      else {
+                          const n = Math.floor(ay_ind / numSoulRow)
+                          console.log(ay_ind)
+                          ay_ind++
+                          return row(n) + 600
+                      }
+                      
+                  })
+                  .attr('fill', 'black')
+        // el.select(".progress").text(d3.format(".1%")(response.progress));
       }
 
 
@@ -180,18 +219,115 @@
         scroller
           .setup({
             step: "#scrolly article .step",
-            offset: 0.5,
+            offset: 0.3,
             progress: true,
             // debug: true
           })
-          .onStepProgress(handleStepProgress);
+          .onStepProgress(handleStepProgress)
+          //.onStepProgress(handleStepEnter)
 
         // setup resize event
         window.addEventListener("resize", handleResize);
       }
 
       // kick things off
+
+
+      const margin = {top: 10, right: 10, bottom: 30, left: 0},
+          width = 920 - margin.left - margin.right,
+          height = 900 - margin.top - margin.bottom;
+          squareSize = 15;
+          strokeWidth = 0;
+          numSoulRow = 50;
+
+      const colorMap = {
+          '1': '#B9C7C5',
+          '2': '#C8B794',
+          '3': '#8A98A3',
+          'Crew': '#BE8275'
+      }
+
+      var row = d3.scaleLinear()
+          .domain([0, numSoulRow])
+          .range([0, width]); 
+      
+      var title_died = d3.select("#title_died")
+      var title_survived = d3.select("#title_survived")
+
+      var svg = d3.select("#area")
+          .append("svg")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+              .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")")
+   
+      var tooltip = d3.select("body").append("div")
+          .attr("class", "tooltip")
+          .style("opacity", 0);
+          
+      
+
+        function render() {
+          d3.csv("../data/titanic.csv").then(function(data) {
+              // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
+              souls = svg.selectAll("rect")
+                  .data(data)
+                  .enter()
+                  .append('rect')
+                  .attr('x', (d, i) => {
+                      const n = i % numSoulRow;
+                      return row(n)
+                  })
+                  .attr('y', (d, i) => {
+                      const n = Math.floor(i / numSoulRow);
+                      return row(n)
+                  })
+                  .attr('rx', 3)
+                  .attr('ry', 3)
+                  .attr('width', squareSize)
+                  .attr('height', squareSize)
+                  .attr('stroke-width', strokeWidth)
+                  .attr('stroke', 'white')
+                  .attr('fill', 'black')
+                  .on('mouseover', handleMouseOver)
+                  .on('mouseout', handleMouseOut);
+                  console.log(data)
+
+              
+
+              function handleMouseOver(d) {
+                  d3.select(this).style('fill', 'black');
+                  d3.select(this).style('opacity', .5);
+
+                  // tooltip
+                  tooltip.transition()
+                      .duration(30)
+                      .style("opacity", 1)
+                  tooltip.html(`${d.Title} ${d.FirstName} ${d.LastName}, ${parseInt(d.Age)}${d.Job? ", " + d.Job: ""}<br><div class='tooltip-more'> Click to learn more </div>`)
+                      .style("left", (d3.event.pageX + 20) + "px")
+                      .style("top", (d3.event.pageY - 20) + "px");
+                  d3.select(this).attr("class", "info").datum(d).style("cursor", "pointer");
+              }
+              function handleMouseOut(d) {
+                  d3.select(this).style('fill', 'black');
+                  d3.select(this).style('opacity', 1)
+
+                  // tooltip
+                  tooltip.transition()
+                      .duration(30)
+                      .style("opacity", 0);
+                  d3.select(this).attr("class", null)
+              }
+          }) 
+
+        }
+
+        render();
+  
       init();
     </script>
+    
+    
   </body>
 </html>
