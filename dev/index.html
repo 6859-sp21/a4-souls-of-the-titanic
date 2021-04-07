@@ -16,7 +16,9 @@
         background-color: black;
         padding: 1rem;
       }
-
+      #outro{
+        background-color: black;
+      }
       #scrolly > * {
         -webkit-box-flex: 1;
         -ms-flex: 1;
@@ -55,9 +57,8 @@
 
       .step {
         margin: 0 auto 20rem auto;
-   
-        background-color: #3b3b3b;
-        color: #fff;
+        background-color: #adabab;
+        color: white;
       }
 
       .step:last-child {
@@ -65,14 +66,15 @@
       }
 
       .step.is-active {
-        background-color: whitesmoke;
-        color whitesmoke;
+        
+        opacity: 100%;
       }
 
       .step p {
         text-align: center;
         padding: 1rem;
         font-size: 1.5rem;
+        color: white;
       }
     </style>
   </head>
@@ -223,12 +225,12 @@
         scroller
           .setup({
             step: "#scrolly article .step",
-            offset: 0.3,
+            offset: 0.5,
             progress: true,
             // debug: true
           })
           .onStepProgress(handleStepProgress)
-          //.onStepProgress(handleStepEnter)
+          .onStepEnter(handleStepEnter)
 
         // setup resize event
         window.addEventListener("resize", handleResize);

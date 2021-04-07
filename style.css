@@ -125,6 +125,8 @@ a:hover {
   color: teal;
   text-decoration: none;
   border-bottom: 2px solid currentColor;
+  padding: 3rem auto;
+  margin: 3rem auto;
 }
 
 
@@ -151,6 +153,8 @@ a:hover {
 
 #outro {
   height: 640px;
+  text-align: center;
+  margin-top: 2rem auto;
 }
 
 
