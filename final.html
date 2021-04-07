@@ -311,8 +311,10 @@
                 }
                 //Highlighting Boxes
                 function highlight(filtered_died, filtered_survived) {
-                    filtered_died.transition().duration(300).style("fill","yellow").attr("id","is-active");
-                    filtered_survived.transition().duration(300).style("fill","purple").attr("id","is-active");
+                    filtered_died.transition().duration(50).delay(function (d, i) {
+                            return 2 * i;}).style("fill","yellow").attr("id","is-active");
+                    filtered_survived.transition().duration(50).delay(function (d, i) {
+                            return 2 * i;}).style("fill","purple").attr("id","is-active");
                 }
 
                 //TODO use unhighlight somewhere
