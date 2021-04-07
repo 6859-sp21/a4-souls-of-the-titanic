@@ -30,8 +30,7 @@
 
             //Square and Highlight Colors
             squareColor = "whitesmoke"
-            diedHighlightColor = "grey"
-            survivedHighlightColor = "grey"
+            highlightColor = "grey"
 
         const colorMap = {
             '1': '#B9C7C5',
@@ -46,9 +45,9 @@
 
         //Filter JSON
         var filters = {
-            gender: [],
-            class: [],
-            age: []
+            gender: ["Male", "Female"],
+            class: ["1", "2", "3", "Crew"],
+            age: [[0,17], [18,35], [35,50], [50,75]]
         }
 
         //Died Grid Dimensions
@@ -75,7 +74,11 @@
             .attr("class", "tooltip")
             .style("opacity", 0);       
 
-        // Filter and Update Data
+        // Filter and Update Data (TODO!)
+        function update_filter(){
+            return filters
+        }
+
         function filter(data){
             sorted_data = data.sort((d1, d2) => (parseInt(d1.Age) > parseInt(d2.Age)) ? 1 : -1);
             return sorted_data
@@ -144,7 +147,7 @@
 
                 // MouseOvers
                 function handleMouseOver(d) {
-                    d3.select(this).style('fill', diedHighlightColor);
+                    d3.select(this).style('fill', highlightColor);
                     d3.select(this).style('opacity', .5);
 
                     // tooltip
@@ -157,6 +160,11 @@
                     d3.select(this).attr("class", "info").datum(d).style("cursor", "pointer");
                 }
                 function handleMouseOut(d) {
+                    // TO DO fix the painting effect
+                    // d3.select(this).style("fill", function(){
+                    //     console.log(d3.select(this).attr("class"));
+                    //     d3.select(this).attr("class") == "is-active"? "blue": "blue";
+                    // });
                     d3.select(this).style('fill', squareColor);
                     d3.select(this).style('opacity', 1)
 
@@ -170,21 +178,35 @@
                 //Handle Click, need to implement the modal
                 function handleClick(){
                     highlight();
+                    //TODO change the grid titles to reflect the number highlighted
                     title_survived.text(`Change Title`).transition().duration(1000);
                 }
 
                 //Highlighting Boxes
                 function highlight() {
-                    console.log("hello");
                     d3.selectAll("rect").attr("class", function (d) {
-                        return (d.Title == "Miss" ? "is-active" : "is-inactive");
+                        return (filters["gender"].includes(d.Sex)
+                        && filters["class"].includes(d.Class)
+                        && inAgeRange(filters["age"], d.Age)
+                        
+                        ? "is-active": "is-inactive")
                     });
                 }
 
+                //TODO use unhighlight somewhere
                 function unhighlight() {
                     d3.selectAll("rect").attr("class", function (d) {
                         return d.predicted_category + " " + "is-active";
                     });
+                }
+
+                function inAgeRange(rangeList, age) {
+                    for (var i=0; i<rangeList.length; i++) {
+                        if (parseInt(age)>=rangeList[i][0] && parseInt(age)<=rangeList[i][1]){
+                            return true;
+                        }
+                    }
+                    return false;
                 }
 
             }) 

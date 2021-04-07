@@ -43,7 +43,7 @@ div.tooltip {
 }
 
 .is-active {
-    color: turquoise;
+    color: turquoise !important;
     opacity: 100%;
   }
 .is-inactive {
