@@ -308,8 +308,8 @@
 
                 // Update Title for Both Grids
                 function update_title(filtered_died,filtered_survived){
-                    title_died.text(`${filtered_died.size()} Souls, ${(filtered_died.size()*100/1496).toFixed(1).toString()}% of Total Victims`);
-                    title_survived.text(`${filtered_survived.size()} Souls, ${(filtered_survived.size()*100/712).toFixed(1).toString()}% of Total Survivors`);
+                    title_died.text(`Died: ${filtered_died.size()} Souls, ${(filtered_died.size()*100/1496).toFixed(1).toString()}% of Total Victims`);
+                    title_survived.text(`Survived: ${filtered_survived.size()} Souls, ${(filtered_survived.size()*100/712).toFixed(1).toString()}% of Total Survivors`);
                 }
                 //Highlighting Boxes
                 function highlight(filtered_died, filtered_survived) {
