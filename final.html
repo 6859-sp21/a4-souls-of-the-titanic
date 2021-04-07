@@ -32,20 +32,13 @@
             squareColor = "whitesmoke"
             highlightColor = "grey"
 
-        const colorMap = {
-            '1': '#B9C7C5',
-            '2': '#C8B794',
-            '3': '#8A98A3',
-            'Crew': '#BE8275'
-        }
-
         var row = d3.scaleLinear()
             .domain([0, numSoulRow])
             .range([0, width_died]); 
 
         //Filter JSON
         var filters = {
-            gender: ["Male", "Female"],
+            gender: ["Male", "Female" ],
             class: ["1", "2", "3", "Crew"],
             age: [[0,17], [18,35], [35,50], [50,75]]
         }
@@ -92,7 +85,8 @@
 
                 // Died Grid
                 died = data.filter(d => d.Survived === "Dead")
-                title_died.text(`${died.length.toString()} Souls, ${(died.length*100/1496).toFixed(1).toString()}% of Total Victims`)
+                title_died.text(`0 Souls, 0% of Total Victims`)
+                .style("color", "yellow")
 
                 svg_died.selectAll("rect")
                     .data(died)
@@ -114,12 +108,13 @@
                     .attr('stroke', squareColor)
                     .attr('fill', squareColor)
                     .on('mouseover', handleMouseOver)
-                    .on('mouseout', handleMouseOut)
+                    .on('mouseout', handleMouseOut_died)
                     .on('click', handleClick);
                 
                 // Survived Grid
                 survived = data.filter(d => d.Survived === "Alive")
-                title_survived.text(`${survived.length.toString()} Souls, ${(survived.length*100/712).toString()}% of Total Survivors`)
+                title_survived.text(`0 Souls, 0% of Total Survivors`)
+                .style("color", "purple")
 
                 svg_survived.selectAll("rect")
                     .data(survived)
@@ -141,7 +136,7 @@
                     .attr('stroke', squareColor)
                     .attr('fill', squareColor)
                     .on('mouseover', handleMouseOver)
-                    .on('mouseout', handleMouseOut)
+                    .on('mouseout', handleMouseOut_survived)
                     .on('click', handleClick);
 
 
@@ -159,14 +154,11 @@
                         .style("top", (d3.event.pageY - 20) + "px");
                     d3.select(this).attr("class", "info").datum(d).style("cursor", "pointer");
                 }
-                function handleMouseOut(d) {
-                    // TO DO fix the painting effect
-                    // d3.select(this).style("fill", function(){
-                    //     console.log(d3.select(this).attr("class"));
-                    //     d3.select(this).attr("class") == "is-active"? "blue": "blue";
-                    // });
-                    d3.select(this).style('fill', squareColor);
-                    d3.select(this).style('opacity', 1)
+                function handleMouseOut_died(d) {
+                    d3.select(this).style("fill", function(){
+                        return d3.select(this).attr("id") == "is-active"? "yellow": squareColor;
+                    });
+                    d3.select(this).style('opacity', 1);
 
                     // tooltip
                     tooltip.transition()
@@ -175,28 +167,48 @@
                     d3.select(this).attr("class", null)
                 }
 
-                //Handle Click, need to implement the modal
-                function handleClick(){
-                    highlight();
-                    //TODO change the grid titles to reflect the number highlighted
-                    title_survived.text(`Change Title`).transition().duration(1000);
+                function handleMouseOut_survived(d) {
+                    d3.select(this).style("fill", function(){
+                        return d3.select(this).attr("id") == "is-active"? "purple": squareColor;
+                    });
+                    d3.select(this).style('opacity', 1);
+
+                    // tooltip
+                    tooltip.transition()
+                        .duration(30)
+                        .style("opacity", 0);
+                    d3.select(this).attr("class", null)
                 }
 
-                //Highlighting Boxes
-                function highlight() {
-                    d3.selectAll("rect").attr("class", function (d) {
-                        return (filters["gender"].includes(d.Sex)
+                function fits_filter(d){
+                    return (filters["gender"].includes(d.Sex)
                         && filters["class"].includes(d.Class)
-                        && inAgeRange(filters["age"], d.Age)
-                        
-                        ? "is-active": "is-inactive")
-                    });
+                        && inAgeRange(filters["age"], d.Age))
+                }
+
+                //Handle Click, need to implement the modal
+                function handleClick(){
+                    filtered_died = svg_died.selectAll("rect").filter(d => fits_filter(d));
+                    filtered_survived = svg_survived.selectAll("rect").filter(d => fits_filter(d));
+                    highlight(filtered_died, filtered_survived);
+                    update_title(filtered_died, filtered_survived);
+                }
+
+                // Update Title for Both Grids
+                function update_title(filtered_died,filtered_survived){
+                    title_died.text(`${filtered_died.size()} Souls, ${(filtered_died.size()*100/1496).toFixed(1).toString()}% of Total Victims`);
+                    title_survived.text(`${filtered_survived.size()} Souls, ${(filtered_survived.size()*100/712).toFixed(1).toString()}% of Total Survivors`);
+                }
+                //Highlighting Boxes
+                function highlight(filtered_died, filtered_survived) {
+                    filtered_died.transition().duration(300).style("fill","yellow").attr("id","is-active");
+                    filtered_survived.transition().duration(300).style("fill","purple").attr("id","is-active");
                 }
 
                 //TODO use unhighlight somewhere
                 function unhighlight() {
-                    d3.selectAll("rect").attr("class", function (d) {
-                        return d.predicted_category + " " + "is-active";
+                    d3.selectAll("rect").attr("id", function (d) {
+                        return "";
                     });
                 }
 
