@@ -7,6 +7,11 @@
     <meta name="description" content="Scrollama: Sticky Side Example" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;500;700&family=Limelight&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/d3@5.9.1/dist/d3.min.js"></script>
+    <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
+    <script src="../node_modules/scrollama/build/scrollama.min.js"></script>
     <style>
       #scrolly {
         position: relative;
@@ -74,20 +79,29 @@
         padding: 1rem;
         font-size: 1.5rem;
         color: white;
+        font-family: 'Josefin Sans';
       }
+
+     
     </style>
   </head>
 
   <body>
 
     <main>
-      <section id="intro">
-        <img src= "../titanic.jpeg">
+      
+      <section id="intro" >
+        <h1 id="title" style="opacity: 0;" class="intro__hed"> h </h1>
+          <h1 id="title" style="color: black;" class="intro__hed">Souls of the Titanic</h1>
+          <h3 style="color: black;font-family: 'Josefin Sans', sans-serif;" class="intro__dek">
+            Start scrolling to explore the real passengers of the Titanic.
+          </h3>
       </section>
-      <section id="intro" style="background-color: black;">
-        <h1 class="intro__hed">Souls of the Titanic</h1>
-        <h1 class="intro__hed">Start scrolling to explore the real passengers of the Titanic. </h1>
-      </section>
+      <section id="crash"style="background-color: black; padding-top: 200px; padding-bottom: 500px;" >
+        <h3 style="color: white;font-family: 'Josefin Sans', sans-serif; font-size: 5em;" >
+          The Titanic crashed on April 14, 1912.
+        </h3>
+    </section>
 
       <section id="scrolly">
         <article>
@@ -117,9 +131,6 @@
       </section>
     </main>
 
-    <script src="https://unpkg.com/d3@5.9.1/dist/d3.min.js"></script>
-    <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
-    <script src="../node_modules/scrollama/build/scrollama.min.js"></script>
     <script>
       // using d3 for convenience
       var main = d3.select("main");
@@ -169,7 +180,7 @@
               
               svg.selectAll("rect")
                   .transition()
-                  .duration(2000)
+                  .duration(1000)
                   .ease(d3.easeQuadIn) 
                   .attr("x", (d, i) => {
                       var n
@@ -277,6 +288,8 @@
         function render() {
           d3.csv("../data/titanic.csv").then(function(data) {
               // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
+              d3.select("#title_died").text(`Titanic: 2208 Souls`);
+
               souls = svg.selectAll("rect")
                   .data(data)
                   .enter()
