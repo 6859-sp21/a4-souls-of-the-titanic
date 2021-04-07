@@ -46,6 +46,20 @@ h3#title_survived {
     font-weight: 500;
 }
 
+.container-first {
+    color:whitesmoke;
+    font-size: 18px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 500;
+    display: block;
+    position: relative;
+    width: 300px;
+    padding-left: 15px;
+    margin-top:10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
 .container {
     color:whitesmoke;
     font-size: 18px;
@@ -53,11 +67,10 @@ h3#title_survived {
     font-weight: 500;
     display: block;
     position: relative;
-    width: 100px;
-    padding-left: 45px;
-    margin-bottom: 15px;
+    width: 300px;
+    padding-left: 15px;
+    margin-bottom: 10px;
     cursor: pointer;
-    font-size: 20px;
 }
 
 div.tooltip {	
