@@ -119,15 +119,18 @@
           </div>
         </article>
 
-        <figure>
-          <h3 id=title_died style="color:white"></h3>
+        <figure style="margin-left: 50px;">
+          <div style="justify-content: row; display: flex">
+            <h3 id=title_died style="color:white; font-size:20px; width:450px"></h3>
+            <h3 id=title_survived style="color:white; font-size:20px"></h3>
+          </div>
           <div id='area'></div>
-          <h3 id=title_survived style="margin-top:-480px; color:white"></h3>
+          
         </figure>
       </section>
 
       <section id="outro">
-        <a href="../final.html"  > Explore the data more here</a>
+        <a href="../final.html" > Explore the data more here</a>
       </section>
     </main>
 
@@ -177,6 +180,13 @@
               var ax_ind = 0;
               var dy_ind = 0;
               var ay_ind = 0;
+
+              var m = {top: 10, right: 10, bottom: 30, left: 0}
+              var w = 1000 - margin.left - margin.right;
+              var h = 800 - margin.top - margin.bottom;
+              var nsrow = 30
+
+              svg.attr("width", w).attr("height", h)
               
               svg.selectAll("rect")
                   .transition()
@@ -185,32 +195,26 @@
                   .attr("x", (d, i) => {
                       var n
                       if (d.Survived === 'Dead'){
-                          n = dx_ind % numSoulRow;
-                          console.log('dd', dx_ind)
+                          n = dx_ind % nsrow;
                           dx_ind++
-
+                          return row(n);
                       }
                       else {
-                          n = ax_ind % numSoulRow;
-                          console.log('a', ax_ind)
+                          n = ax_ind % nsrow;
                           ax_ind++;
-                      }
-
-                      return row(n);
-                      
+                          return row(n) + 450;
+                      }  
                   })
                   .attr("y", (d, i) => {
                       if (d.Survived === 'Dead'){
-                          const n = Math.floor(dy_ind / numSoulRow)
-                          console.log('d', dy_ind)
+                          const n = Math.floor(dy_ind / nsrow)
                           dy_ind++
                           return row(n)
                       }
                       else {
-                          const n = Math.floor(ay_ind / numSoulRow)
-                          console.log(ay_ind)
+                          const n = Math.floor(ay_ind / nsrow)
                           ay_ind++
-                          return row(n) + 350
+                          return row(n)
                       }
                       
                   })
