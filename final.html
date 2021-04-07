@@ -22,9 +22,9 @@
             <h3 id=title_survived></h3>
             <div id='final_survived'></div>
         </div>
-        <div style="margin-left: 50px;margin-top: 20px;">
+        <div style="margin-left: 50px;margin-top: 100px;">
             <h1 id="filter_category">Gender</h1>
-                <label class="container">Male
+                <label class="container-first">Male
                     <input type="checkbox" id="Male" checked="check" onclick="updateFilter(); render();">
                     <span class="checkmark"></span>
                 </label>
@@ -33,7 +33,7 @@
                     <span class="checkmark"></span>
                 </label>
             <h1 id="filter_category">Class</h1>
-                <label class="container">1st Class
+                <label class="container-first">1st Class
                     <input type="checkbox" id="1" checked="check" onclick="updateFilter(); render();">
                     <span class="checkmark"></span>
                 </label>
@@ -50,7 +50,7 @@
                     <span class="checkmark"></span>
                 </label>
             <h1 id="filter_category">Age</h1>
-                <label class="container"> 0-17 Years
+                <label class="container-first"> 0-17 Years
                     <input type="checkbox" id="ageGroup1" checked="check" onclick="updateFilter(); render();">
                     <span class="checkmark"></span>
                 </label>
@@ -74,17 +74,19 @@
 
     <script>
         const margin = {top: 0, right: 30, bottom: 10, left: 0},
-            width_died = 920 - margin.left - margin.right,
-            height_died = 550 - margin.top - margin.bottom;
-            width_survived = 920 - margin.left - margin.right,
+            width_died = 1100 - margin.left - margin.right,
+            height_died = 400 - margin.top - margin.bottom;
+            width_survived = 1100 - margin.left - margin.right,
             height_survived = 300 - margin.top - margin.bottom;
-            squareSize = 15;
+            squareSize = 14;
             strokeWidth = 0;
-            numSoulRow = 50;
+            numSoulRow = 67;
 
             //Square and Highlight Colors
             squareColor = "whitesmoke"
             highlightColor = "grey"
+            diedColor = "#adc3c7"
+            survivedColor = "#e0c3a7"
 
         var row = d3.scaleLinear()
             .domain([0, numSoulRow])
@@ -185,7 +187,7 @@
                 // Died Grid
                 died = filter(data, 'Dead')
                 title_died.text(`0 Souls, 0% of Total Victims`)
-                .style("color", "yellow")
+                .style("color", diedColor)
 
                 svg_died.selectAll("rect")
                     .data(died)
@@ -213,7 +215,7 @@
                 // Survived Grid
                 survived = filter(data, 'Alive')
                 title_survived.text(`0 Souls, 0% of Total Survivors`)
-                .style("color", "purple")
+                .style("color", survivedColor)
 
                 svg_survived.selectAll("rect")
                     .data(survived)
@@ -257,7 +259,7 @@
                 }
                 function handleMouseOut_died(d) {
                     d3.select(this).style("fill", function(){
-                        return d3.select(this).attr("id") == "is-active"? "yellow": squareColor;
+                        return d3.select(this).attr("id") == "is-active"? diedColor: squareColor;
                     });
                     d3.select(this).style('opacity', 1);
 
@@ -270,7 +272,7 @@
 
                 function handleMouseOut_survived(d) {
                     d3.select(this).style("fill", function(){
-                        return d3.select(this).attr("id") == "is-active"? "purple": squareColor;
+                        return d3.select(this).attr("id") == "is-active"? survivedColor: squareColor;
                     });
                     d3.select(this).style('opacity', 1);
 
@@ -312,9 +314,9 @@
                 //Highlighting Boxes
                 function highlight(filtered_died, filtered_survived) {
                     filtered_died.transition().duration(50).delay(function (d, i) {
-                            return 2 * i;}).style("fill","yellow").attr("id","is-active");
-                    filtered_survived.transition().duration(50).delay(function (d, i) {
-                            return 2 * i;}).style("fill","purple").attr("id","is-active");
+                            return 2 + i;}).style("fill",diedColor).attr("id","is-active");
+                    filtered_survived.transition().duration(100).delay(function (d, i) {
+                            return 10 + i;}).style("fill",survivedColor).attr("id","is-active");
                 }
 
                 //TODO use unhighlight somewhere
