@@ -46,6 +46,20 @@ h3#title_survived {
     font-weight: 500;
 }
 
+h3#title_died1 {
+  color:whitesmoke;
+  font-size: 25px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 500;
+}
+
+h3#title_survived1 {
+  color:whitesmoke;
+  font-size: 25px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 500;
+}
+
 
 .container {
     color:whitesmoke;
@@ -107,6 +121,7 @@ body {
   min-height: 1280px;
   color: #3b3b3b;
   font-size: 24px;
+  background-color: black;
 }
 
 p,
@@ -155,7 +170,7 @@ a:hover {
 #outro {
   height: 640px;
   text-align: center;
-  margin-top: 2rem auto;
+  background-color: black;
 }
 
 /* Button */
@@ -188,4 +203,71 @@ a.button1:hover{
     display:block;
     margin:0.4em auto;
   }
+}
+
+#scrolly {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: black;
+  padding: 1rem;
+}
+
+#scrolly > * {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+article {
+  position: relative;
+  padding: 0 1rem;
+  max-width: 20rem;
+}
+
+figure {
+  position: sticky;
+  width: 100%;
+  margin: 0;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  z-index: 0;
+}
+
+figure p {
+  text-align: center;
+  padding: 1rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.step {
+  margin: 0 auto 20rem auto;
+  background-color: #adabab;
+  color: white;
+}
+
+.step:last-child {
+  margin-bottom: 0;
+}
+
+.step.is-active {
+  color: whitesmoke;
+}
+
+.step p {
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.5rem;
+  color: white;
+  font-family: 'Josefin Sans';
 }

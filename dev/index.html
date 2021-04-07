@@ -9,9 +9,13 @@
     <link rel="stylesheet" href="../style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;500;700&family=Limelight&display=swap" rel="stylesheet">
 
-    <script src="https://unpkg.com/d3@5.9.1/dist/d3.min.js"></script>
     <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
     <script src="../node_modules/scrollama/build/scrollama.min.js"></script>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <style>
       #scrolly {
         position: relative;
@@ -23,6 +27,7 @@
       }
       #outro{
         background-color: black;
+        padding-top: 500px;
       }
       #scrolly > * {
         -webkit-box-flex: 1;
@@ -121,8 +126,8 @@
 
         <figure style="margin-left: 50px;">
           <div style="justify-content: row; display: flex">
-            <h3 id=title_died style="color:white; font-size:20px; width:450px"></h3>
-            <h3 id=title_survived style="color:white; font-size:20px"></h3>
+            <h3 id=title_died1 style="color:white; font-size:20px; width:600px"></h3>
+            <h3 id=title_survived1 style="color:white; font-size:20px"></h3>
           </div>
           <div id='area'></div>
           
@@ -130,7 +135,79 @@
       </section>
 
       <section id="outro">
-        <a href="../final.html" > Explore the data more here</a>
+         <!-- Final Visualization -->
+         <div style="flex-direction:row;display: flex;">
+          <div style="margin-left: 50px">
+              <h1 id=title style="margin-top: 30px;">Souls of the Titanic</h1>
+              <div style="flex-direction:row;display: flex;">
+                  <div>
+                      <h3 id=title_died></h3>
+                      <div id='final_died'></div>
+                  </div>
+                  <div>
+                      <h3 id=title_survived></h3>
+                      <div id='final_survived'></div>
+  
+                      <div style="margin-left: 20px;margin-top: 70px;flex-direction:row;display: flex;">
+                          <div style="display:block;width:200px">
+                              <h1 id="filter_category">Gender</h1>
+                              <label class="container">Male
+                                  <input type="checkbox" id="Male" checked="check" onclick="updateFilter(); render();">
+                                  <span class="checkmark"></span>
+                              </label>
+                              <label class="container">Female
+                                  <input type="checkbox" id="Female" checked="check" onclick="updateFilter(); render();">
+                                  <span class="checkmark"></span>
+                              </label>
+                          </div>
+                          <div style="display:block;width:200px">
+                              <h1 id="filter_category">Class</h1>
+                              <label class="container">1st Class
+                                  <input type="checkbox" id="1" checked="check" onclick="updateFilter(); render();">
+                                  <span class="checkmark"></span>
+                              </label>
+                              <label class="container">2nd Class
+                                  <input type="checkbox" id="2" checked="check" onclick="updateFilter(); render();">
+                                  <span class="checkmark"></span>
+                              </label>
+                              <label class="container">3rd Class
+                                  <input type="checkbox" id="3" checked="check" onclick="updateFilter(); render();">
+                                  <span class="checkmark"></span>
+                              </label>
+                              <label class="container">Crew
+                                  <input type="checkbox" id="Crew" checked="check" onclick="updateFilter(); render();">
+                                  <span class="checkmark"></span>
+                              </label>
+                          </div>
+                          <div style="display:block;width:200px">
+                              <h1 id="filter_category">Age</h1>
+                              <label class="container"> 0-17 Years
+                                  <input type="checkbox" id="ageGroup1" checked="check" onclick="updateFilter(); render();">
+                                  <span class="checkmark"></span>
+                              </label>
+                              <label class="container"> 18-35 Years
+                                  <input type="checkbox" id="ageGroup2" checked="check" onclick="updateFilter(); render();">
+                                  <span class="checkmark"></span>
+                              </label>
+                              <label class="container"> 35-50 Years
+                                  <input type="checkbox" id="ageGroup3" checked="check" onclick="updateFilter(); render();">
+                                  <span class="checkmark"></span>
+                              </label>
+                              <label class="container"> 50-75 Years
+                                  <input type="checkbox" id="ageGroup4" checked="check" onclick="updateFilter(); render();">
+                                  <span class="checkmark"></span>
+                              </label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              
+          </div>
+         
+        </div>  
+    
+        <!-- Modal -->
+        <div id="myModal" style="border:2px solid whitesmoke; background-color: black" class="modal"></div>
       </section>
     </main>
 
@@ -181,10 +258,10 @@
               var dy_ind = 0;
               var ay_ind = 0;
 
-              var m = {top: 10, right: 10, bottom: 30, left: 0}
-              var w = 1000 - margin.left - margin.right;
-              var h = 800 - margin.top - margin.bottom;
-              var nsrow = 30
+              var m = {top: 5, right: 5, bottom: 30, left: 0}
+              var w = 1300 - margin.left - margin.right;
+              var h = 1000 - margin.top - margin.bottom;
+              var nsrow = 35
 
               svg.attr("width", w).attr("height", h)
               
@@ -202,7 +279,7 @@
                       else {
                           n = ax_ind % nsrow;
                           ax_ind++;
-                          return row(n) + 450;
+                          return row(n) + 600;
                       }  
                   })
                   .attr("y", (d, i) => {
@@ -222,9 +299,9 @@
                   svg.selectAll("rect")
                   // died = data.filter(d => d.Survived === "Dead")
                   died = 1496
-                  d3.select("#title_died").text(`Died: ${died.toString()} Souls, ${(Math.round(died*100/2208)).toString()}% of All Passengers`)
+                  d3.select("#title_died1").text(`Died: ${died.toString()} Souls, ${(Math.round(died*100/2208)).toString()}% of All Passengers`)
                   survived = 712
-                  d3.select("#title_survived").text(`Survived: ${survived.toString()} Souls, ${(Math.round(survived*100/2208)).toString()}% of All Passengers`)
+                  d3.select("#title_survived1").text(`Survived: ${survived.toString()} Souls, ${(Math.round(survived*100/2208)).toString()}% of All Passengers`)
         // el.select(".progress").text(d3.format(".1%")(response.progress));
       }
 
@@ -254,12 +331,12 @@
       // kick things off
 
 
-      const margin = {top: 10, right: 10, bottom: 30, left: 0},
-          width = 920 - margin.left - margin.right,
-          height = 800 - margin.top - margin.bottom;
-          squareSize = 12;
-          strokeWidth = 0;
-          numSoulRow = 67;
+      const margin1 = {top: 10, right: 10, bottom: 30, left: 0},
+          width = 1300 - margin1.left - margin1.right,
+          height = 1000 - margin1.top - margin1.bottom,
+          squareSize1 = 12,
+          strokeWidth1 = 0,
+          numSoulRow1 = 63;
 
       const colorMap = {
           '1': '#B9C7C5',
@@ -269,19 +346,19 @@
       }
 
       var row = d3.scaleLinear()
-          .domain([0, numSoulRow])
+          .domain([0, numSoulRow1])
           .range([0, width]); 
       
-      var title_died = d3.select("#title_died")
-      var title_survived = d3.select("#title_survived")
+      var title_died1 = d3.select("#title_died1")
+      var title_survived1 = d3.select("#title_survived1")
 
       var svg = d3.select("#area")
           .append("svg")
-              .attr("width", width + margin.left + margin.right)
-              .attr("height", height + margin.top + margin.bottom)
+              .attr("width", width + margin1.left + margin1.right)
+              .attr("height", height + margin1.top + margin1.bottom)
           .append("g")
               .attr("transform",
-                  "translate(" + margin.left + "," + margin.top + ")")
+                  "translate(" + margin1.left + "," + margin1.top + ")")
    
       var tooltip = d3.select("body").append("div")
           .attr("class", "tooltip")
@@ -289,33 +366,33 @@
           
       
 
-        function render() {
+        function render1() {
           d3.csv("../data/titanic.csv").then(function(data) {
               // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
-              d3.select("#title_died").text(`Titanic: 2208 Souls`);
+              d3.select("#title_died1").text(`Titanic: 2208 Souls`);
 
               souls = svg.selectAll("rect")
                   .data(data)
                   .enter()
                   .append('rect')
                   .attr('x', (d, i) => {
-                      const n = i % numSoulRow;
+                      const n = i % numSoulRow1;
                       return row(n)
                   })
                   .attr('y', (d, i) => {
-                      const n = Math.floor(i / numSoulRow);
+                      const n = Math.floor(i / numSoulRow1);
                       return row(n)
                   })
                   .attr('rx', 3)
                   .attr('ry', 3)
-                  .attr('width', squareSize)
-                  .attr('height', squareSize)
-                  .attr('stroke-width', strokeWidth)
+                  .attr('width', squareSize1)
+                  .attr('height', squareSize1)
+                  .attr('stroke-width', strokeWidth1)
                   .attr('stroke', 'white')
                   .attr('fill', 'white')
                   .on('mouseover', handleMouseOver)
                   .on('mouseout', handleMouseOut);
-                  console.log(data)
+                  // console.log(data)
 
               
 
@@ -345,10 +422,272 @@
           }) 
 
         }
-
-        render();
   
       init();
+
+      const margin = {top: 0, right: 30, bottom: 10, left: 0},
+          width_died = 700 - margin.left - margin.right,
+          height_died = 700 - margin.top - margin.bottom,
+          width_survived = 700 - margin.left - margin.right,
+          height_survived = 300 - margin.top - margin.bottom,
+          squareSize = 15,
+          strokeWidth = 0,
+          numSoulRow = 40,
+
+          //Square and Highlight Colors
+          squareColor = "whitesmoke",
+          highlightColor = "grey",
+          diedColor = "#adc3c7",
+          survivedColor = "#e0c3a7";
+
+      var row = d3.scaleLinear()
+          .domain([0, numSoulRow])
+          .range([0, width_died]); 
+
+      //Filter JSON
+      var filters = {
+          gender: ["Male", "Female"],
+          class: ["1", "2", "3", "Crew"],
+          age: [[0,17], [18,35], [35,50], [50,75]]
+      }
+
+      //Died Grid Dimensions
+      var title_died = d3.select("#title_died")
+      var svg_died = d3.select("#final_died")
+          .append("svg")
+              .attr("width", width_died + margin.left + margin.right)
+              .attr("height", height_died + margin.top + margin.bottom)
+          .append("g")
+              .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")")
+      
+      //Survived Grid Dimensions
+      var title_survived = d3.select("#title_survived")
+      var svg_survived = d3.select("#final_survived")
+          .append("svg")
+              .attr("width", width_survived + margin.left + margin.right)
+              .attr("height", height_survived + margin.top + margin.bottom)
+          .append("g")
+              .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")")
+   
+      var tooltip = d3.select("body").append("div")
+          .attr("class", "tooltip")
+          .style("opacity", 0);       
+
+      // Filter and Update Data (TODO!)
+      function updateFilter(){
+          genderFilter = ["Male", "Female"]
+          classFilter = ["1", "2", "3", "Crew"]
+          ageFilter = ["ageGroup1", "ageGroup2", "ageGroup3", "ageGroup4"]
+          ageMap = {"ageGroup1":[0,17], "ageGroup2":[18,35], "ageGroup3":[35,50], "ageGroup4":[50,75]}
+
+          filters["gender"] = genderFilter.map(f => {if (document.getElementById(f).checked == true) return f});
+          // console.log('filters', filters)
+          filters["class"] = classFilter.map(f => {if (document.getElementById(f).checked == true) return f});
+          filters["age"] = ageFilter.map(f => {if (document.getElementById(f).checked == true) return ageMap[f]});
+
+          return filters
+      }
+
+      function filter(data, survived){
+          survived_data = data.filter(d => d.Survived === survived)
+          filtered_data = survived_data.filter(d => fitsFilter(d))
+          rest_of_data = survived_data.filter(d => !filtered_data.includes(d))
+
+          const all_data = []
+          var i = 0
+          for (key in filtered_data) {
+              if (filtered_data.hasOwnProperty(key)) {
+                  all_data[i] = filtered_data[key]
+                  i++
+              }
+          }
+          for (key in rest_of_data) {
+              if (rest_of_data.hasOwnProperty(key)) {
+                  all_data[i] = rest_of_data[key]
+                  i++
+              }
+          }
+          return all_data
+      }
+      function fitsFilter(d){
+          return (filters["gender"].includes(d.Sex)
+              && filters["class"].includes(d.Class)
+              && inAgeRange(filters["age"], d.Age))
+      }
+      function inAgeRange(rangeList, age) {
+          // console.log('rangeList', rangeList)
+          for (var i=0; i<rangeList.length; i++) {
+              if (rangeList[i]) {
+                  if (parseInt(age)>=rangeList[i][0] && parseInt(age)<=rangeList[i][1]){
+                      return true;
+                  }
+              }
+          }
+          return false;
+      }
+
+      // Render Grids
+        function render() {
+
+          d3.csv("../data/titanic.csv").then(function(data) {
+              // data = filter(data)
+              unhighlight()
+              // console.log('good')
+              
+              // Died Grid
+              died = filter(data, 'Dead')
+              title_died.text(`0 Souls, 0% of Total Victims`)
+              .style("color", diedColor)
+
+              svg_died.selectAll("rect")
+                  .data(died)
+                  .enter()
+                  .append('rect')
+                  .attr('x', (d, i) => {
+                      const n = i % numSoulRow;
+                      return row(n)
+                  })
+                  .attr('y', (d, i) => {
+                      const n = Math.floor(i / numSoulRow);
+                      return row(n)
+                  })
+                  .attr('rx', 3)
+                  .attr('ry', 3)
+                  .attr('width', squareSize)
+                  .attr('height', squareSize)
+                  .attr('stroke-width', strokeWidth)
+                  .attr('stroke', squareColor)
+                  .attr('fill', squareColor)
+                  .on('mouseover', handleMouseOver)
+                  .on('mouseout', handleMouseOut_died)
+                  .on('click', handleClick);
+              
+              // Survived Grid
+              survived = filter(data, 'Alive')
+              title_survived.text(`0 Souls, 0% of Total Survivors`)
+              .style("color", survivedColor)
+
+              svg_survived.selectAll("rect")
+                  .data(survived)
+                  .enter()
+                  .append('rect')
+                  .attr('x', (d, i) => {
+                      const n = i % numSoulRow;
+                      return row(n)
+                  })
+                  .attr('y', (d, i) => {
+                      const n = Math.floor(i / numSoulRow);
+                      return row(n)
+                  })
+                  .attr('rx', 3)
+                  .attr('ry', 3)
+                  .attr('width', squareSize)
+                  .attr('height', squareSize)
+                  .attr('stroke-width', strokeWidth)
+                  .attr('stroke', squareColor)
+                  .attr('fill', squareColor)
+                  .on('mouseover', handleMouseOver)
+                  .on('mouseout', handleMouseOut_survived)
+                  .on('click', handleClick);
+
+                  handleFilter()
+
+
+              // MouseOvers
+              function handleMouseOver(d) {
+                  d3.select(this).style('fill', highlightColor);
+                  d3.select(this).style('opacity', .5);
+
+                  // tooltip
+                  tooltip.transition()
+                      .duration(30)
+                      .style("opacity", 1)
+                  tooltip.html(`${d.Title} ${d.FirstName} ${d.LastName}, ${parseInt(d.Age)}${d.Job? ", " + d.Job: ""}<br><div class='tooltip-more'> Click to learn more </div>`)
+                      .style("left", (d3.event.pageX + 20) + "px")
+                      .style("top", (d3.event.pageY - 20) + "px");
+                  d3.select(this).attr("class", "info").datum(d).style("cursor", "pointer");
+              }
+              function handleMouseOut_died(d) {
+                  d3.select(this).style("fill", function(){
+                      return d3.select(this).attr("id") == "is-active"? diedColor: squareColor;
+                  });
+                  d3.select(this).style('opacity', 1);
+
+                  // tooltip
+                  tooltip.transition()
+                      .duration(30)
+                      .style("opacity", 0);
+                  d3.select(this).attr("class", null)
+              }
+
+              function handleMouseOut_survived(d) {
+                  d3.select(this).style("fill", function(){
+                      return d3.select(this).attr("id") == "is-active"? survivedColor: squareColor;
+                  });
+                  d3.select(this).style('opacity', 1);
+
+                  // tooltip
+                  tooltip.transition()
+                      .duration(30)
+                      .style("opacity", 0);
+                  d3.select(this).attr("class", null)
+              }
+
+              
+
+              //Handle Click, need to implement the modal
+              function handleClick(d){
+                  $("#myModal").modal({fadeDuration: 300})
+                  .html(`<h1 id="modal_name">${d.Title} ${d.FirstName} ${d.LastName}</h1>
+                          <h1 id="modal_survived"">${d.Survived== "Alive"? "Survived": "Died"}</h1>
+                          <h1 id="modal_info">Gender: ${d.Sex}</h1>
+                          <h1 id="modal_info">Age: ${d.Age}</h1>
+                          <h1 id="modal_info">Class: ${d.Class_Dept}</h1>
+                          <h1 id="modal_info">${d.Job? "Occupation: " + d.Job: ""}</h1>
+                          <h1 id="modal_info">Boarding Location: ${d.Boarded}</h1>
+                          <br>
+                          <div style="text-align:center"><a href="https://www.encyclopedia-titanica.org/${d.Survived == "Alive"? "titanic-survivor": "titanic-victim"}/${d.FirstName.split(' ').join('-')}-${d.LastName}.html" class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);    
+              }
+
+              function handleFilter(d){
+                  filtered_died = svg_died.selectAll("rect").filter(d => fitsFilter(d));
+                  filtered_survived = svg_survived.selectAll("rect").filter(d => fitsFilter(d));
+                  highlight(filtered_died, filtered_survived);
+                  update_title(filtered_died, filtered_survived);
+              }
+
+              // Update Title for Both Grids
+              function update_title(filtered_died,filtered_survived){
+                  title_died.text(`Died: ${filtered_died.size()} Souls, ${(filtered_died.size()*100/1496).toFixed(1).toString()}% of Total Victims`);
+                  title_survived.text(`Survived: ${filtered_survived.size()} Souls, ${(filtered_survived.size()*100/712).toFixed(1).toString()}% of Total Survivors`);
+              }
+              //Highlighting Boxes
+              function highlight(filtered_died, filtered_survived) {
+                  filtered_died.transition().duration(100).delay(function (d, i) {
+                          return i;}).style("fill",diedColor).attr("id","is-active");
+                  filtered_survived.transition().duration(100).delay(function (d, i) {
+                          return i;}).style("fill",survivedColor).attr("id","is-active");
+              }
+
+              //TODO use unhighlight somewhere
+              function unhighlight() {
+                  d3.selectAll("rect").remove()
+              }
+
+              
+
+          }) 
+        }
+
+        render();
+        render1();
+  
+      // d3
+      // .select(".target")  // select the elements that have the class 'target'
+      // .style("stroke-width", 8)
+        
     </script>
     
     
