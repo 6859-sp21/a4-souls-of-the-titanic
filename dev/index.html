@@ -124,10 +124,13 @@
           </div>
         </article>
 
-        <figure>
-          <h3 id=title_died1 style="color:white"></h3>
+        <figure style="margin-left: 50px;">
+          <div style="justify-content: row; display: flex">
+            <h3 id=title_died1 style="color:white; font-size:20px; width:600px"></h3>
+            <h3 id=title_survived1 style="color:white; font-size:20px"></h3>
+          </div>
           <div id='area'></div>
-          <h3 id=title_survived1 style="margin-top:-350px; color:white"></h3>
+          
         </figure>
       </section>
 
@@ -254,6 +257,13 @@
               var ax_ind = 0;
               var dy_ind = 0;
               var ay_ind = 0;
+
+              var m = {top: 5, right: 5, bottom: 30, left: 0}
+              var w = 1300 - margin.left - margin.right;
+              var h = 1000 - margin.top - margin.bottom;
+              var nsrow = 35
+
+              svg.attr("width", w).attr("height", h)
               
               svg.selectAll("rect")
                   .transition()
@@ -262,32 +272,26 @@
                   .attr("x", (d, i) => {
                       var n
                       if (d.Survived === 'Dead'){
-                          n = dx_ind % numSoulRow;
-                          // console.log('dd', dx_ind)
+                          n = dx_ind % nsrow;
                           dx_ind++
-
+                          return row(n);
                       }
                       else {
-                          n = ax_ind % numSoulRow;
-                          // console.log('a', ax_ind)
+                          n = ax_ind % nsrow;
                           ax_ind++;
-                      }
-
-                      return row(n);
-                      
+                          return row(n) + 600;
+                      }  
                   })
                   .attr("y", (d, i) => {
                       if (d.Survived === 'Dead'){
-                          const n = Math.floor(dy_ind / numSoulRow)
-                          // console.log('d', dy_ind)
+                          const n = Math.floor(dy_ind / nsrow)
                           dy_ind++
                           return row(n)
                       }
                       else {
-                          const n = Math.floor(ay_ind / numSoulRow)
-                          // console.log(ay_ind)
+                          const n = Math.floor(ay_ind / nsrow)
                           ay_ind++
-                          return row(n) + 670
+                          return row(n)
                       }
                       
                   })
@@ -328,11 +332,11 @@
 
 
       const margin1 = {top: 10, right: 10, bottom: 30, left: 0},
-          width = 920 - margin1.left - margin1.right,
+          width = 1300 - margin1.left - margin1.right,
           height = 1000 - margin1.top - margin1.bottom,
           squareSize1 = 12,
           strokeWidth1 = 0,
-          numSoulRow1 = 67;
+          numSoulRow1 = 63;
 
       const colorMap = {
           '1': '#B9C7C5',
