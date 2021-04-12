@@ -60,17 +60,25 @@ h3#title_survived1 {
   font-weight: 500;
 }
 
+h3#activeFilterTitle {
+  color:whitesmoke;
+  font-size: 25px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 500;
+}
+
+
 
 .container {
     color:whitesmoke;
-    font-size: 18px;
+    font-size: 15px;
     font-family: 'Josefin Sans', sans-serif;
     font-weight: 500;
-    display: block;
+    display: inline-block;
     position: relative;
-    width: 300px;
-    padding-left: 15px;
-    margin-top: 10px;
+    /* width: 120px; */
+    /* padding-left: 15px; */
+    /* margin-top: 10px; */
     cursor: pointer;
 }
 

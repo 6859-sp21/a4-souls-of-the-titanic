@@ -18,15 +18,24 @@
 
     //Filter JSON
     var filters = {
-      gender: ["Male", "Female"],
-      class: ["1", "2", "3", "Crew"],
-      age: [
-        [0, 17],
-        [18, 35],
-        [35, 50],
-        [50, 75],
-      ],
+      gender: [],
+      class: [],
+      age: [],
     };
+
+    var filtersDefault = {
+    gender: ["Male", "Female"],
+    class: ["1", "2", "3", "Crew"],
+    age: [
+      [0, 17],
+      [18, 35],
+      [35, 50],
+      [50, 75],
+    ],
+  };
+
+    var activeFilterTitle = d3.select("#activeFilterTitle");
+    var filterTitle = "";
 
     //Died Grid Dimensions
     var title_died = d3.select("#title_died");
@@ -69,13 +78,37 @@
       filters["gender"] = genderFilter.map((f) => {
         if (document.getElementById(f).checked == true) return f;
       });
-      // console.log('filters', filters)
       filters["class"] = classFilter.map((f) => {
         if (document.getElementById(f).checked == true) return f;
       });
       filters["age"] = ageFilter.map((f) => {
         if (document.getElementById(f).checked == true) return ageMap[f];
       });
+      noSelectCount = 0
+      filterTitle = ""
+      for (filterKey in filters) {
+        var filterCount = 0
+        var curFilter = filters[filterKey]
+        for (f in curFilter) {
+          if (curFilter[f] === undefined) filterCount+=1;
+          else filterTitle += curFilter[f] + ", ";
+        }
+        noSelectCount += filterCount;
+        if (filterCount === curFilter.length) {
+          filters[filterKey] = filtersDefault[filterKey];
+        }
+      }
+
+      console.log('ok', noSelectCount)
+      console.log('ok')
+      console.log(filterTitle)
+
+      if (noSelectCount === 10) {
+        console.log('ahhh')
+        filters["gender"] = [];
+        filters["class"] = [];
+        filters["age"] = [];
+      }
 
       return filters;
     }
@@ -121,6 +154,30 @@
         }
       }
       return false;
+    }
+
+    function findPerson(firstName, lastName) {
+      // find the person and highlight their square
+      person = svg_died
+        .selectAll('rect')
+        .filter((d) => d.FirstName.toLowerCase().includes(firstName.toLowerCase()) 
+                      && d.LastName.toLowerCase().includes(lastName.toLowerCase()))
+        .attr('stroke', 'red')
+        .attr('stroke-width', 5)
+      person_s = svg_survived
+        .selectAll('rect')
+        // .transition()
+        .filter((d) => d.FirstName.toLowerCase().includes(firstName.toLowerCase()) 
+                      && d.LastName.toLowerCase().includes(lastName.toLowerCase()))
+        .attr('stroke', 'red')
+        .attr('stroke-width', 5)
+
+    }
+    function updateFinding() {
+      if (document.getElementById("Dorothy").checked == true) findPerson("Dorothy", "Gibson");
+      if (document.getElementById("Wallace").checked == true) findPerson("Wallace", "Hartley");
+      if (document.getElementById("Edward").checked == true) findPerson("Edward", "Smith");
+      if (document.getElementById("Margaret").checked == true) findPerson("Margaret", "Brown");
     }
 
     // Render Grids
@@ -191,6 +248,11 @@
           .on("click", handleClick);
 
         handleFilter();
+        updateFinding();
+        console.log('hello', filterTitle.substring(0,filterTitle.length-2))
+        activeFilterTitle
+          .text(`You are filtering for: ` + filterTitle.substring(0,filterTitle.length-2))
+          .style("color", "white")
 
         // MouseOvers
         function handleMouseOver(d) {
