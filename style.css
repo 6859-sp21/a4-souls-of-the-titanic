@@ -62,25 +62,104 @@ h3#title_survived1 {
 
 h3#activeFilterTitle {
   color:whitesmoke;
-  font-size: 25px;
+  font-size: 20px;
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 500;
 }
 
-
-
-.container {
-    color:whitesmoke;
-    font-size: 15px;
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 500;
-    display: inline-block;
-    position: relative;
-    /* width: 120px; */
-    /* padding-left: 15px; */
-    /* margin-top: 10px; */
-    cursor: pointer;
+.close-modal {
+  margin-top:0px;
+  border-bottom: none!important;
+  border: solid 1px;
+  border-radius: 20px;
+  border-color: white;
 }
+.close-modal:hover {
+  margin-top:0px;
+  border-bottom: none!important;
+  opacity:.9;
+}
+
+/* Customize the label (the container) */
+.container {
+  display: block;
+  position: relative;
+  align-items: center;
+  width: 130px;
+  font-size: 15px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 500;
+  padding-left: 35px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: gray;
+  opacity: .5;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: whitesmoke;
+  opacity: 1;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 7px;
+  top: 3px;
+  width: 3px;
+  height: 10px;
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.container input:checked ~ .custom-label {
+  color: whitesmoke
+}
+
 
 div.tooltip {	
     position: absolute;			

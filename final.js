@@ -33,7 +33,7 @@ age: [
 };
 
 var activeFilterTitle = d3.select("#activeFilterTitle");
-var filterTitle = "";
+var filterTitle = "Select a filter to see passenger demographics!";
 
 //Died Grid Dimensions
 var title_died = d3.select("#title_died");
@@ -72,6 +72,18 @@ function updateFilter() {
     ageGroup3: [35, 50],
     ageGroup4: [50, 75],
   };
+  titleMap = {
+    "Male": "Male",
+    "Female": "Female",
+    "1": "1st Class",
+    "2": "2nd Class",
+    "3": "3rd Class",
+    "Crew": "Crew",
+    "0,17": "0-17 Years",
+    "18,35": "18-35 Years",
+    "35,50": "35-50 Years",
+    "50,75": "50-75 Years"
+  }
 
   filters["gender"] = genderFilter.map((f) => {
     if (document.getElementById(f).checked == true) return f;
@@ -89,7 +101,7 @@ function updateFilter() {
     var curFilter = filters[filterKey]
     for (f in curFilter) {
       if (curFilter[f] === undefined) filterCount+=1;
-      else filterTitle += curFilter[f] + ", ";
+      else {filterTitle += titleMap[curFilter[f].toString()] + ", "; console.log(curFilter[f].toString())};
     }
     noSelectCount += filterCount;
     if (filterCount === curFilter.length) {
@@ -97,15 +109,17 @@ function updateFilter() {
     }
   }
 
+  filterTitle = "You are looking at all passengers who are: " + filterTitle.substring(0,filterTitle.length-2)
+
   console.log('ok', noSelectCount)
   console.log('ok')
   console.log(filterTitle)
 
   if (noSelectCount === 10) {
-    console.log('ahhh')
     filters["gender"] = [];
     filters["class"] = [];
     filters["age"] = [];
+    filterTitle = "Select a filter to see passenger demographics!"
   }
 
   return filters;
@@ -165,7 +179,6 @@ function inAgeRange(rangeList, age) {
         .attr('stroke-width', 5)
       person_s = svg_survived
         .selectAll('rect')
-        // .transition()
         .filter((d) => d.FirstName.toLowerCase().includes(firstName.toLowerCase()) 
                       && d.LastName.toLowerCase().includes(lastName.toLowerCase()))
         .attr('stroke', 'red')
@@ -248,7 +261,7 @@ function inAgeRange(rangeList, age) {
         updateFinding();
         console.log('hello', filterTitle.substring(0,filterTitle.length-2))
         activeFilterTitle
-          .text(`You are filtering for: ` + filterTitle.substring(0,filterTitle.length-2))
+          .text(filterTitle)
           .style("color", "white")
 
     // MouseOvers
