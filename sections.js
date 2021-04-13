@@ -167,6 +167,8 @@ function belfastVis() {
 
   belfast.transition().duration(500);
 
+  d3.select("#title_died1").text(`Titanic Passengers: ${belfastData.length} Souls from Belfast`);
+
   belfast.exit().remove();
 }
 function southamptonVis() {
@@ -200,6 +202,8 @@ function southamptonVis() {
     .on("click", handleClick);
 
   southampton.transition().duration(500);
+
+  d3.select("#title_died1").text(`Titanic Passengers: ${southamptonData.length} Souls from Belfast and Southampton`);
 
   southampton.exit().remove();
 }
@@ -235,6 +239,9 @@ function cherbourgVis() {
     .on("mouseout", handleMouseOut)
     .on("click", handleClick);
   cherbourg.transition().duration(500);
+
+  d3.select("#title_died1").text(`Titanic Passengers: ${cherbourgData.length} Souls from Belfast, Southampton, and Cherbourg`);
+
   cherbourg.exit().remove();
 }
 
@@ -271,6 +278,9 @@ function queenstownVis() {
     .on("mouseout", handleMouseOut)
     .on("click", handleClick);
   queenstown.transition().duration(500);
+
+  d3.select("#title_died1").text(`Titanic Passengers: ${queenstownData.length} Souls from Belfast, Southampton, Cherbourg, and Queenstown`);
+
   queenstown.exit().remove();
 }
 
@@ -297,6 +307,13 @@ function classes() {
     .attr("id", (d) => {
       return d.Class;
     });
+
+    classes_title = d3.select("#title_died1").text(`Titanic Passengers: `);
+    classes_title.append("text").text(`${firstClass.length} Souls in 1st Class, `).style('color', colorMap[1]);
+    classes_title.append("text").text(`${secondClass.length} Souls in 2nd Class, `).style("color", colorMap[2]);
+    classes_title.append("text").text(`${thirdClass.length} Souls in 3rd Class, `).style("color", colorMap[3]);
+    classes_title.append("text").text(`and ${crew.length} Souls in the Crew `).style("color", colorMap['Crew']);
+
 }
 
 function init() {
@@ -340,7 +357,6 @@ function handleMouseOut(d) {
       }
     }
   });
-  d3.select(this).style("opacity", 1);
 
   // tooltip
   tooltip.transition().duration(30).style("opacity", 0);
@@ -371,6 +387,7 @@ var tooltip = d3
 function handleMouseOver(d) {
   d3.select(this).style("fill", "black");
   d3.select(this).style("opacity", 0.5);
+  d3.select(this).style('stroke', 'black').attr('stroke-width', 1)
 
   // tooltip
   tooltip.transition().duration(30).style("opacity", 1);
