@@ -97,7 +97,10 @@
 
   <body>
     <main>
-      <section id="intro" style="background-image: url('../titanic.jpeg')">
+      <section
+        id="intro"
+        style="background-image: url('../titanic.jpeg'); height: 125vh"
+      >
         <h1 id="title" style="opacity: 0" class="intro__hed">h</h1>
         <h1 id="title" style="color: black" class="intro__hed">
           Souls of the Titanic
@@ -110,7 +113,7 @@
         </h3>
       </section>
 
-      <section id="scrolly" style="background-color: beige">
+      <section id="scrolly" style="background-color: #d5d0d0">
         <article id="pre-crash-article">
           <div class="step" data-step="0">
             <p class="progress">
@@ -250,14 +253,7 @@
           </div>
         </figure>
       </section>
-      <section
-        id="crash"
-        style="
-          background-color: black;
-          padding-top: 200px;
-          padding-bottom: 500px;
-        "
-      >
+      <section id="crash">
         <h3
           style="
             color: white;
@@ -490,5 +486,18 @@
     <script src="sections.js"></script>
     <script src="post-crash-sections.js"></script>
     <script src="final.js"></script>
+    <script>
+      //crash change theme
+      var elmnt2 = document.getElementById("scrolly");
+      var elmnt3 = document.getElementById("intro");
+      var y = elmnt2.scrollHeight + elmnt3.scrollHeight;
+      $(window).on("scroll", function () {
+        if ($(window).scrollTop() > y) {
+          $("#crash").addClass("on-scroll");
+        } else {
+          $("#crash").removeClass("on-scroll");
+        }
+      });
+    </script>
   </body>
 </html>

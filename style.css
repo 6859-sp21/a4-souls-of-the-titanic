@@ -238,10 +238,25 @@ a:hover {
   background-size: cover;
 }
 
-/* #crash{
-  height: 40rem;
+#crash{
   text-align: center;
-} */
+  background-color: #d5d0d0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  padding-top: 200px; 
+  padding-bottom: 500px; 
+  height: 150vh;
+
+  transition: 0.2s all linear;
+  -webkit-transition:background-color 0.2s;
+  -moz-transition:background-color 0.2s;
+  transition:background-color 0.2s;
+}
+
+.on-scroll{
+  background-color: black!important;
+}
 
 .intro__hed {
   font-size: 2em;
