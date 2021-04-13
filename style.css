@@ -159,10 +159,10 @@ a:hover {
   background-size: cover;
 }
 
-#crash{
+/* #crash{
   height: 40rem;
   text-align: center;
-}
+} */
 
 .intro__hed {
   font-size: 2em;
@@ -267,11 +267,13 @@ figure p {
 }
 
 .step:last-child {
-  margin-bottom: 0;
+  margin-bottom: 0rem;
+  opacity: 0%;
 }
 
 .step.is-active {
   color: whitesmoke;
+  
 }
 
 .step p {
