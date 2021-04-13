@@ -14,22 +14,22 @@ const margin = { top: 0, right: 30, bottom: 10, left: 0 },
 
 var row = d3.scaleLinear().domain([0, numSoulRow]).range([0, width_died]);
 
- //Filter JSON
- var filters = {
+//Filter JSON
+var filters = {
   gender: [],
   class: [],
   age: [],
 };
 
 var filtersDefault = {
-gender: ["Male", "Female"],
-class: ["1", "2", "3", "Crew"],
-age: [
-  [0, 17],
-  [18, 35],
-  [35, 50],
-  [50, 75],
-],
+  gender: ["Male", "Female"],
+  class: ["1", "2", "3", "Crew"],
+  age: [
+    [0, 17],
+    [18, 35],
+    [35, 50],
+    [50, 75],
+  ],
 };
 
 var activeFilterTitle = d3.select("#activeFilterTitle");
@@ -73,17 +73,17 @@ function updateFilter() {
     ageGroup4: [50, 75],
   };
   titleMap = {
-    "Male": "Male",
-    "Female": "Female",
-    "1": "1st Class",
-    "2": "2nd Class",
-    "3": "3rd Class",
-    "Crew": "Crew",
+    Male: "Male",
+    Female: "Female",
+    1: "1st Class",
+    2: "2nd Class",
+    3: "3rd Class",
+    Crew: "Crew",
     "0,17": "0-17 Years",
     "18,35": "18-35 Years",
     "35,50": "35-50 Years",
-    "50,75": "50-75 Years"
-  }
+    "50,75": "50-75 Years",
+  };
 
   filters["gender"] = genderFilter.map((f) => {
     if (document.getElementById(f).checked == true) return f;
@@ -94,14 +94,17 @@ function updateFilter() {
   filters["age"] = ageFilter.map((f) => {
     if (document.getElementById(f).checked == true) return ageMap[f];
   });
-  noSelectCount = 0
-  filterTitle = ""
+  noSelectCount = 0;
+  filterTitle = "";
   for (filterKey in filters) {
-    var filterCount = 0
-    var curFilter = filters[filterKey]
+    var filterCount = 0;
+    var curFilter = filters[filterKey];
     for (f in curFilter) {
-      if (curFilter[f] === undefined) filterCount+=1;
-      else {filterTitle += titleMap[curFilter[f].toString()] + ", "; console.log(curFilter[f].toString())};
+      if (curFilter[f] === undefined) filterCount += 1;
+      else {
+        filterTitle += titleMap[curFilter[f].toString()] + ", ";
+        console.log(curFilter[f].toString());
+      }
     }
     noSelectCount += filterCount;
     if (filterCount === curFilter.length) {
@@ -109,19 +112,20 @@ function updateFilter() {
     }
   }
 
-  filterTitle = "You are looking at all passengers who are: " + filterTitle.substring(0,filterTitle.length-2)
+  filterTitle =
+    "You are looking at all passengers who are: " +
+    filterTitle.substring(0, filterTitle.length - 2);
 
   if (noSelectCount === 10) {
     filters["gender"] = [];
     filters["class"] = [];
     filters["age"] = [];
-    filterTitle = "Select a filter to see passenger demographics!"
+    filterTitle = "Select a filter to see passenger demographics!";
   }
 
   return filters;
 }
 
-      
 function filter(data, survived) {
   survived_data = data.filter((d) => d.Survived === survived);
   filtered_data = survived_data.filter((d) => fitsFilter(d));
@@ -248,11 +252,10 @@ function inAgeRange(rangeList, age) {
       .on("mouseout", handleMouseOut_survived)
       .on("click", handleClick);
 
-        handleFilter();
-        updateFinding();
-        activeFilterTitle
-          .text(filterTitle)
-          .style("color", "white")
+    handleFilter();
+    updateFinding();
+    console.log("hello", filterTitle.substring(0, filterTitle.length - 2));
+    activeFilterTitle.text(filterTitle).style("color", "white");
 
     // MouseOvers
     function handleMouseOver(d) {
@@ -313,11 +316,9 @@ function inAgeRange(rangeList, age) {
                         }</h1>
                         <h1 id="modal_info">Boarding Location: ${d.Boarded}</h1>
                         <br>
-                        <div style="text-align:center"><a href="https://www.encyclopedia-titanica.org/${
-                          d.Survived == "Alive"
-                            ? "titanic-survivor"
-                            : "titanic-victim"
-                        }/${d.FirstName.split(" ").join("-")}-${d.LastName}.html" class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
+                        <div style="text-align:center"><a href=${
+                          d.url
+                        } class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
     }
 
     function handleFilter(d) {

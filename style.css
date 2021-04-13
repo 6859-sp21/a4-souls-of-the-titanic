@@ -466,6 +466,21 @@ a.button1:hover{
   flex: 1;
 }
 
+#post-crash-scrolly {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: black;
+  padding: 1rem;
+}
+
+#post-crash-scrolly > * {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
 article {
   position: relative;
   padding: 0 1rem;
@@ -473,6 +488,16 @@ article {
 }
 
 figure {
+  position: sticky;
+  width: 100%;
+  margin: 0;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  z-index: 0;
+}
+
+#post-crash-figure {
   position: sticky;
   width: 100%;
   margin: 0;
@@ -520,4 +545,11 @@ figure p {
   font-size: 1.5rem;
   color: white;
   font-family: 'Josefin Sans';
+}
+
+.circle {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background: black;
 }

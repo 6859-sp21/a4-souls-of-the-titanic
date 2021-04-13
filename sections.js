@@ -1,6 +1,6 @@
 // using d3 for convenience
 const margin1 = { top: 10, right: 10, bottom: 30, left: 0 },
-  width = 1300 - margin1.left - margin1.right,
+  width = 1200 - margin1.left - margin1.right,
   height = 1000 - margin1.top - margin1.bottom,
   squareSize1 = 12,
   strokeWidth1 = 0,
@@ -51,6 +51,76 @@ function handleResize() {
   scroller.resize();
 }
 
+// HANDLE TIMELINE SCROLL
+window.smoothScroll = function (target) {
+  var scrollContainer = target;
+  do {
+    //find scroll container
+    scrollContainer = scrollContainer.parentNode;
+    if (!scrollContainer) return;
+    scrollContainer.scrollTop += 1;
+  } while (scrollContainer.scrollTop == 0);
+
+  var targetY = 0;
+  do {
+    //find the top of target relatively to the container
+    if (target == scrollContainer) break;
+    targetY += target.offsetTop;
+  } while ((target = target.offsetParent));
+
+  scroll = function (c, a, b, i) {
+    i++;
+    if (i > 30) return;
+    c.scrollTop = a + ((b - a) / 30) * i;
+    setTimeout(function () {
+      scroll(c, a, b, i);
+    }, 20);
+  };
+  // start scrolling
+  scroll(scrollContainer, scrollContainer.scrollTop, targetY, 0);
+};
+
+clickable_labels = d3
+  .selectAll(".circle")
+  .on("click", function () {
+    stepNumber = d3.select(this).attr("id").split("circle")[1];
+    if (stepNumber == 0) {
+      step = document.getElementsByClassName("intro__dek")[0];
+      console.log(step);
+      smoothScroll(step);
+    } else {
+      step = document.getElementsByClassName("step")[stepNumber - 1];
+      console.log(step);
+      smoothScroll(step);
+    }
+  })
+  .on("mouseover", function () {
+    d3.select(this)
+      .transition()
+      .duration(400)
+      .style("width", "14px")
+      .style("height", "14px")
+      .style("background", "grey");
+  })
+  .on("mouseout", function () {
+    d3.select(this)
+      .transition()
+      .duration(400)
+      .style("width", "10px")
+      .style("height", "10px")
+      .style("background", "black");
+  });
+
+// get scrollama percentages
+function handleStepProgress(response) {
+  progress = d3
+    .select(`#step${response.index}`)
+    .style("height", `${response.progress * 100}%`)
+    .style("background", "black");
+  // console.log("progress:", progress);
+  // console.log("response:", response);
+}
+
 function handleStepEnter(response) {
   console.log(response.index);
   if (response.index == 0) {
@@ -64,68 +134,6 @@ function handleStepEnter(response) {
   } else if (response.index == 4) {
     classes();
   } else if (response.index == 5) {
-  } else if (response.index == 6) {
-    var dx_ind = 0;
-    var ax_ind = 0;
-    var dy_ind = 0;
-    var ay_ind = 0;
-
-    var m = { top: 5, right: 5, bottom: 30, left: 0 };
-    var w = 1300 - margin.left - margin.right;
-    var h = 1000 - margin.top - margin.bottom;
-    var nsrow = 35;
-
-    svg.attr("width", w).attr("height", h);
-
-    svg
-      .selectAll("rect")
-      .transition()
-      .duration(700)
-      .attr("x", (d, i) => {
-        var n;
-        if (d.Survived === "Dead") {
-          n = dx_ind % nsrow;
-          dx_ind++;
-          return row(n);
-        } else {
-          n = ax_ind % nsrow;
-          ax_ind++;
-          return row(n) + 600;
-        }
-      })
-      .attr("y", (d, i) => {
-        if (d.Survived === "Dead") {
-          const n = Math.floor(dy_ind / nsrow);
-          dy_ind++;
-          return row(n);
-        } else {
-          const n = Math.floor(ay_ind / nsrow);
-          ay_ind++;
-          return row(n);
-        }
-      })
-      .attr("fill", "white")
-      .attr("opacity", 1);
-    svg.selectAll("rect");
-    // died = data.filter(d => d.Survived === "Dead")
-    died = 1496;
-    d3.select("#title_died1").text(
-      `Died: ${died.toString()} Souls, ${Math.round(
-        (died * 100) / 2208
-      ).toString()}% of All Passengers`
-    );
-    survived = 712;
-    d3.select("#title_survived1").text(
-      `Survived: ${survived.toString()} Souls, ${Math.round(
-        (survived * 100) / 2208
-      ).toString()}% of All Passengers`
-    );
-  } else if (response.index == 7) {
-    musicianVis();
-  } else if (response.index == 8) {
-    firstClassVis();
-  } else if (response.index == 9) {
-    womenAndChildrenVis();
   }
   // el.select(".progress").text(d3.format(".1%")(response.progress));
 }
@@ -266,184 +274,6 @@ function queenstownVis() {
   queenstown.exit().remove();
 }
 
-function musicianVis() {
-  var dx_ind = 0;
-  var ax_ind = 0;
-  var dy_ind = 0;
-  var ay_ind = 0;
-  var nsrow = 35;
-  var w = 1300 - margin.left - margin.right;
-  var h = 1000 - margin.top - margin.bottom;
-  musicians = rawData.filter((d) => d.Job == "Musician");
-  rest = rawData.filter((d) => d.Job != "Musician");
-
-  sortedMusicians = musicians.concat(rest);
-
-  svg
-    .selectAll("rect")
-    .data(sortedMusicians)
-    .attr("x", (d, i) => {
-      var n;
-      if (d.Survived === "Dead") {
-        n = dx_ind % nsrow;
-        dx_ind++;
-        return row(n);
-      } else {
-        n = ax_ind % nsrow;
-        ax_ind++;
-        return row(n) + 600;
-      }
-    })
-    .attr("y", (d, i) => {
-      if (d.Survived === "Dead") {
-        const n = Math.floor(dy_ind / nsrow);
-        dy_ind++;
-        return row(n);
-      } else {
-        const n = Math.floor(ay_ind / nsrow);
-        ay_ind++;
-        return row(n);
-      }
-    })
-    .transition()
-    .duration(700)
-    .attr("fill", (d) => {
-      return d.Job == "Musician" ? diedColor : highlightColor;
-    })
-    .attr("id", (d) => {
-      if (d.Survived == "Alive") {
-        return d.Job == "Musician" ? "survived-active" : "survived-inactive";
-      } else {
-        return d.Job == "Musician" ? "dead-active" : "dead-inactive";
-      }
-    });
-}
-
-function firstClassVis() {
-  var dx_ind = 0;
-  var ax_ind = 0;
-  var dy_ind = 0;
-  var ay_ind = 0;
-  var nsrow = 35;
-  var w = 1300 - margin.left - margin.right;
-  var h = 1000 - margin.top - margin.bottom;
-  first = rawData.filter((d) => d.Class == "1");
-  firstRest = rawData.filter((d) => d.Class != "1");
-
-  sortedFirst = first.concat(firstRest);
-
-  svg
-    .selectAll("rect")
-    .data(sortedFirst)
-    .attr("x", (d, i) => {
-      var n;
-      if (d.Survived === "Dead") {
-        n = dx_ind % nsrow;
-        dx_ind++;
-        return row(n);
-      } else {
-        n = ax_ind % nsrow;
-        ax_ind++;
-        return row(n) + 600;
-      }
-    })
-    .attr("y", (d, i) => {
-      if (d.Survived === "Dead") {
-        const n = Math.floor(dy_ind / nsrow);
-        dy_ind++;
-        return row(n);
-      } else {
-        const n = Math.floor(ay_ind / nsrow);
-        ay_ind++;
-        return row(n);
-      }
-    })
-    .transition()
-    .duration(700)
-    .attr("fill", (d) => {
-      if (d.Survived == "Alive") {
-        return d.Class == "1" ? survivedColor : highlightColor;
-      } else {
-        return d.Class == "1" ? diedColor : highlightColor;
-      }
-    })
-    .attr("id", (d) => {
-      if (d.Survived == "Alive") {
-        return d.Class == "1" ? "survived-active" : "survived-inactive";
-      } else {
-        return d.Class == "1" ? "dead-active" : "dead-inactive";
-      }
-    });
-}
-function womenAndChildrenVis() {
-  var dx_ind = 0;
-  var ax_ind = 0;
-  var dy_ind = 0;
-  var ay_ind = 0;
-  var nsrow = 35;
-  var w = 1300 - margin.left - margin.right;
-  var h = 1000 - margin.top - margin.bottom;
-  womenAndChildren = rawData.filter(
-    (d) => d.Sex == "Female" || d.Adut_or_Chld == "Child"
-  );
-  womenAndChildrenRest = rawData.filter(
-    (d) => !(d.Sex == "Female" || d.Adut_or_Chld == "Child")
-  );
-
-  sortedwomenAndChildren = womenAndChildren.concat(womenAndChildrenRest);
-
-  svg
-    .selectAll("rect")
-    .data(sortedwomenAndChildren)
-    .attr("x", (d, i) => {
-      var n;
-      if (d.Survived === "Dead") {
-        n = dx_ind % nsrow;
-        dx_ind++;
-        return row(n);
-      } else {
-        n = ax_ind % nsrow;
-        ax_ind++;
-        return row(n) + 600;
-      }
-    })
-    .attr("y", (d, i) => {
-      if (d.Survived === "Alive") {
-        const n = Math.floor(dy_ind / nsrow);
-        dy_ind++;
-        return row(n);
-      } else {
-        const n = Math.floor(ay_ind / nsrow);
-        ay_ind++;
-        return row(n);
-      }
-    })
-    .transition()
-    .duration(700)
-    .attr("fill", (d) => {
-      if (d.Survived == "Alive") {
-        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-          ? survivedColor
-          : highlightColor;
-      } else {
-        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-          ? diedColor
-          : highlightColor;
-      }
-    })
-    .attr("id", (d) => {
-      if (d.Survived == "Alive") {
-        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-          ? "survived-active"
-          : "survived-inactive";
-      } else {
-        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-          ? "dead-active"
-          : "dead-inactive";
-      }
-    });
-}
-
 function classes() {
   firstClass = rawData.filter((d) => d.Class == "1");
   secondClass = rawData.filter((d) => d.Class == "2");
@@ -472,7 +302,7 @@ function classes() {
 function init() {
   // 1. force a resize on load to ensure proper dimensions are sent to scrollama
   handleResize();
-~
+
   // 2. setup the scroller passing options
   // 		this will also initialize trigger observations
   // 3. bind scrollama event handlers (this can be chained like below)
@@ -483,6 +313,7 @@ function init() {
       progress: true,
       // debug: true
     })
+    .onStepProgress(handleStepProgress)
     .onStepEnter(handleStepEnter);
 
   // setup resize event
@@ -569,13 +400,9 @@ function handleClick(d) {
                         }</h1>
                         <h1 id="modal_info">Boarding Location: ${d.Boarded}</h1>
                         <br>
-                        <div style="text-align:center"><a href="https://www.encyclopedia-titanica.org/${
-                          d.Survived == "Alive"
-                            ? "titanic-survivor"
-                            : "titanic-victim"
-                        }/${d.FirstName.split(" ").join("-")}-${
-    d.LastName
-  }.html" class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
+                        <div style="text-align:center"><a href=${
+                          d.url
+                        } class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
 }
 function render1() {
   d3.csv("data/titanic.csv").then(function (data) {
