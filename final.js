@@ -116,10 +116,6 @@ function updateFilter() {
     "You are looking at all passengers who are: " +
     filterTitle.substring(0, filterTitle.length - 2);
 
-  console.log("ok", noSelectCount);
-  console.log("ok");
-  console.log(filterTitle);
-
   if (noSelectCount === 10) {
     filters["gender"] = [];
     filters["class"] = [];
@@ -173,44 +169,30 @@ function inAgeRange(rangeList, age) {
   return false;
 }
 
-function findPerson(firstName, lastName) {
-  // find the person and highlight their square
-  person = svg_died
-    .selectAll("rect")
-    .filter(
-      (d) =>
-        d.FirstName.toLowerCase().includes(firstName.toLowerCase()) &&
-        d.LastName.toLowerCase().includes(lastName.toLowerCase())
-    )
-    .attr("stroke", "red")
-    .attr("stroke-width", 5);
-  person_s = svg_survived
-    .selectAll("rect")
-    .filter(
-      (d) =>
-        d.FirstName.toLowerCase().includes(firstName.toLowerCase()) &&
-        d.LastName.toLowerCase().includes(lastName.toLowerCase())
-    )
-    .attr("stroke", "red")
-    .attr("stroke-width", 5);
-}
-function updateFinding() {
-  if (document.getElementById("Dorothy").checked == true)
-    findPerson("Dorothy", "Gibson");
-  if (document.getElementById("Wallace").checked == true)
-    findPerson("Wallace", "Hartley");
-  if (document.getElementById("Edward").checked == true)
-    findPerson("Edward", "Smith");
-  if (document.getElementById("Margaret").checked == true)
-    findPerson("Margaret", "Brown");
-}
+    function findPerson(firstName, lastName) {
+      // find the person and highlight their square
+      person = d3
+        .selectAll('rect')
+        .filter((d) => d.FirstName.toLowerCase().includes(firstName.toLowerCase()) 
+                      && d.LastName.toLowerCase().includes(lastName.toLowerCase()))
+        .attr('stroke', '#e37059')
+        .attr('stroke-width', 5)
+    }
 
-// Render Grids
-function render() {
-  d3.csv("../data/titanic.csv").then(function (data) {
-    // data = filter(data)
-    unhighlight();
-    // console.log('good')
+    function updateFinding() {
+      console.log('updating')
+      if (document.getElementById("Dorothy").checked === true) findPerson("Dorothy", "Gibson");
+      if (document.getElementById("Wallace").checked === true) findPerson("Wallace", "Hartley");
+      if (document.getElementById("Edward").checked === true) findPerson("Edward", "Smith");
+      if (document.getElementById("Margaret").checked == true) {findPerson("Margaret", "Brown"); console.log('ahhhhh')};
+    }
+
+    // Render Grids
+    function render() {
+      d3.csv("../data/titanic.csv").then(function (data) {
+        // data = filter(data)
+        unhighlight();
+        console.log('good')
 
     // Died Grid
     died = filter(data, "Dead");
