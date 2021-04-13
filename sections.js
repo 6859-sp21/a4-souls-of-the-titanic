@@ -204,133 +204,6 @@ function queenstownVis() {
   queenstown.exit().remove();
 }
 
-
-
-function firstClassVis() {
-  var dx_ind = 0;
-  var ax_ind = 0;
-  var dy_ind = 0;
-  var ay_ind = 0;
-  var nsrow = 35;
-  var w = 1300 - margin.left - margin.right;
-  var h = 1000 - margin.top - margin.bottom;
-  first = rawData.filter((d) => d.Class == "1");
-  firstRest = rawData.filter((d) => d.Class != "1");
-
-  sortedFirst = first.concat(firstRest);
-
-  svg
-    .selectAll("rect")
-    .data(sortedFirst)
-    .attr("x", (d, i) => {
-      var n;
-      if (d.Survived === "Dead") {
-        n = dx_ind % nsrow;
-        dx_ind++;
-        return row(n);
-      } else {
-        n = ax_ind % nsrow;
-        ax_ind++;
-        return row(n) + 600;
-      }
-    })
-    .attr("y", (d, i) => {
-      if (d.Survived === "Dead") {
-        const n = Math.floor(dy_ind / nsrow);
-        dy_ind++;
-        return row(n);
-      } else {
-        const n = Math.floor(ay_ind / nsrow);
-        ay_ind++;
-        return row(n);
-      }
-    })
-    .transition()
-    .duration(700)
-    .attr("fill", (d) => {
-      if (d.Survived == "Alive") {
-        return d.Class == "1" ? survivedColor : highlightColor;
-      } else {
-        return d.Class == "1" ? diedColor : highlightColor;
-      }
-    })
-    .attr("id", (d) => {
-      if (d.Survived == "Alive") {
-        return d.Class == "1" ? "survived-active" : "survived-inactive";
-      } else {
-        return d.Class == "1" ? "dead-active" : "dead-inactive";
-      }
-    });
-}
-// function womenAndChildrenVis() {
-//   var dx_ind = 0;
-//   var ax_ind = 0;
-//   var dy_ind = 0;
-//   var ay_ind = 0;
-//   var nsrow = 35;
-//   var w = 1300 - margin.left - margin.right;
-//   var h = 1000 - margin.top - margin.bottom;
-//   womenAndChildren = rawData.filter(
-//     (d) => d.Sex == "Female" || d.Adut_or_Chld == "Child"
-//   );
-//   womenAndChildrenRest = rawData.filter(
-//     (d) => !(d.Sex == "Female" || d.Adut_or_Chld == "Child")
-//   );
-
-//   sortedwomenAndChildren = womenAndChildren.concat(womenAndChildrenRest);
-
-//   svg
-//     .selectAll("rect")
-//     .data(sortedwomenAndChildren)
-//     .attr("x", (d, i) => {
-//       var n;
-//       if (d.Survived === "Dead") {
-//         n = dx_ind % nsrow;
-//         dx_ind++;
-//         return row(n);
-//       } else {
-//         n = ax_ind % nsrow;
-//         ax_ind++;
-//         return row(n) + 600;
-//       }
-//     })
-//     .attr("y", (d, i) => {
-//       if (d.Survived === "Alive") {
-//         const n = Math.floor(dy_ind / nsrow);
-//         dy_ind++;
-//         return row(n);
-//       } else {
-//         const n = Math.floor(ay_ind / nsrow);
-//         ay_ind++;
-//         return row(n);
-//       }
-//     })
-//     .transition()
-//     .duration(700)
-//     .attr("fill", (d) => {
-//       if (d.Survived == "Alive") {
-//         return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-//           ? survivedColor
-//           : highlightColor;
-//       } else {
-//         return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-//           ? diedColor
-//           : highlightColor;
-//       }
-//     })
-//     .attr("id", (d) => {
-//       if (d.Survived == "Alive") {
-//         return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-//           ? "survived-active"
-//           : "survived-inactive";
-//       } else {
-//         return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-//           ? "dead-active"
-//           : "dead-inactive";
-//       }
-//     });
-// }
-
 function classes() {
   firstClass = rawData.filter((d) => d.Class == "1");
   secondClass = rawData.filter((d) => d.Class == "2");
@@ -456,13 +329,9 @@ function handleClick(d) {
                         }</h1>
                         <h1 id="modal_info">Boarding Location: ${d.Boarded}</h1>
                         <br>
-                        <div style="text-align:center"><a href="https://www.encyclopedia-titanica.org/${
-                          d.Survived == "Alive"
-                            ? "titanic-survivor"
-                            : "titanic-victim"
-                        }/${d.FirstName.split(" ").join("-")}-${
-    d.LastName
-  }.html" class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
+                        <div style="text-align:center"><a href=${
+                          d.url
+                        } class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
 }
 function render1() {
   d3.csv("data/titanic.csv").then(function (data) {
