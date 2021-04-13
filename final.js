@@ -377,8 +377,8 @@ function inAgeRange(rangeList, age) {
 }
 
 render();
-render1();
-
+// render1();
+// render2();
 // d3
 // .select(".target")  // select the elements that have the class 'target'
 // .style("stroke-width", 8)

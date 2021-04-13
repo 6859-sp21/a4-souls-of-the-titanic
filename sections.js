@@ -117,8 +117,6 @@ function handleStepProgress(response) {
     .select(`#step${response.index}`)
     .style("height", `${response.progress * 100}%`)
     .style("background", "black");
-  // console.log("progress:", progress);
-  // console.log("response:", response);
 }
 
 function handleStepEnter(response) {
@@ -200,6 +198,7 @@ function southamptonVis() {
     (d) => d.Boarded === "Belfast" || d.Boarded === "Southampton"
   );
 
+
   southampton = svg.selectAll("rect").data(southamptonData);
 
   southampton
@@ -236,6 +235,7 @@ function cherbourgVis() {
       d.Boarded === "Southampton" ||
       d.Boarded === "Cherbourg"
   );
+
   cherbourg = svg.selectAll("rect").data(cherbourgData);
 
   cherbourg
@@ -272,8 +272,9 @@ function queenstownVis() {
       d.Boarded === "Cherbourg" ||
       d.Boarded === "Queenstown"
   );
-  queenstown = svg.selectAll("rect").data(queenstownData).attr("fill", "white");
 
+  queenstown = svg.selectAll("rect").data(queenstownData).attr("fill", "white");
+  
   queenstown
     .enter()
     .append("rect")
@@ -313,8 +314,6 @@ function classes() {
   svg
     .selectAll("rect")
     .data(allData5)
-    .transition()
-    .duration(700)
     .attr("fill", (d, i) => {
       return colorMap[d.Class];
     })
