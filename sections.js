@@ -472,18 +472,19 @@ function classes() {
 function init() {
   // 1. force a resize on load to ensure proper dimensions are sent to scrollama
   handleResize();
-~
-  // 2. setup the scroller passing options
-  // 		this will also initialize trigger observations
-  // 3. bind scrollama event handlers (this can be chained like below)
-  scroller
-    .setup({
-      step: "#scrolly article .step",
-      offset: 0.5,
-      progress: true,
-      // debug: true
-    })
-    .onStepEnter(handleStepEnter);
+  ~(
+    // 2. setup the scroller passing options
+    // 		this will also initialize trigger observations
+    // 3. bind scrollama event handlers (this can be chained like below)
+    scroller
+      .setup({
+        step: "#scrolly article .step",
+        offset: 0.5,
+        progress: true,
+        // debug: true
+      })
+      .onStepEnter(handleStepEnter)
+  );
 
   // setup resize event
   window.addEventListener("resize", handleResize);
@@ -569,13 +570,9 @@ function handleClick(d) {
                         }</h1>
                         <h1 id="modal_info">Boarding Location: ${d.Boarded}</h1>
                         <br>
-                        <div style="text-align:center"><a href="https://www.encyclopedia-titanica.org/${
-                          d.Survived == "Alive"
-                            ? "titanic-survivor"
-                            : "titanic-victim"
-                        }/${d.FirstName.split(" ").join("-")}-${
-    d.LastName
-  }.html" class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
+                        <div style="text-align:center"><a href=${
+                          d.url
+                        } class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
 }
 function render1() {
   d3.csv("data/titanic.csv").then(function (data) {
