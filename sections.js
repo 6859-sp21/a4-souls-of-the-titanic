@@ -123,19 +123,45 @@ function handleStepProgress(response) {
 
 function handleStepEnter(response) {
   console.log(response.index);
-  if (response.index == 0) {
-    belfastVis();
+  if (response.index == 0){
+    singleSquare();
   } else if (response.index == 1) {
-    southamptonVis();
+    belfastVis();
   } else if (response.index == 2) {
-    cherbourgVis();
+    southamptonVis();
   } else if (response.index == 3) {
-    queenstownVis();
+    cherbourgVis();
   } else if (response.index == 4) {
-    classes();
+    queenstownVis();
   } else if (response.index == 5) {
-  }
+    classes();
+  } 
   // el.select(".progress").text(d3.format(".1%")(response.progress));
+}
+function singleSquare() {
+  const dorothyData = rawData.filter((d) => d.FirstName === "Dorothy Winifred");
+
+  dorothy = svg.selectAll("rect").data(dorothyData);
+
+  dorothy
+    .enter()
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("rx", 3)
+    .attr("ry", 3)
+    .attr("width", squareSize1)
+    .attr("height", squareSize1)
+    .attr("stroke-width", strokeWidth1)
+    .attr("stroke", "white")
+    .attr("fill", "white")
+    .on("mouseover", handleMouseOver)
+    .on("mouseout", handleMouseOut)
+    .on("click", handleClick);
+
+  dorothy.transition().duration(500);
+
+  dorothy.exit().remove();
 }
 function belfastVis() {
   const belfastData = rawData.filter((d) => d.Boarded === "Belfast");
