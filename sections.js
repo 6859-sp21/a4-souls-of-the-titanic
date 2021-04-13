@@ -1,6 +1,6 @@
 // using d3 for convenience
 const margin1 = { top: 10, right: 10, bottom: 30, left: 0 },
-  width = 1300 - margin1.left - margin1.right,
+  width = 1200 - margin1.left - margin1.right,
   height = 1000 - margin1.top - margin1.bottom,
   squareSize1 = 12,
   strokeWidth1 = 0,
@@ -49,6 +49,76 @@ function handleResize() {
 
   // 3. tell scrollama to update new element dimensions
   scroller.resize();
+}
+
+// HANDLE TIMELINE SCROLL
+window.smoothScroll = function (target) {
+  var scrollContainer = target;
+  do {
+    //find scroll container
+    scrollContainer = scrollContainer.parentNode;
+    if (!scrollContainer) return;
+    scrollContainer.scrollTop += 1;
+  } while (scrollContainer.scrollTop == 0);
+
+  var targetY = 0;
+  do {
+    //find the top of target relatively to the container
+    if (target == scrollContainer) break;
+    targetY += target.offsetTop;
+  } while ((target = target.offsetParent));
+
+  scroll = function (c, a, b, i) {
+    i++;
+    if (i > 30) return;
+    c.scrollTop = a + ((b - a) / 30) * i;
+    setTimeout(function () {
+      scroll(c, a, b, i);
+    }, 20);
+  };
+  // start scrolling
+  scroll(scrollContainer, scrollContainer.scrollTop, targetY, 0);
+};
+
+clickable_labels = d3
+  .selectAll(".circle")
+  .on("click", function () {
+    stepNumber = d3.select(this).attr("id").split("circle")[1];
+    if (stepNumber == 0) {
+      step = document.getElementsByClassName("intro__dek")[0];
+      console.log(step);
+      smoothScroll(step);
+    } else {
+      step = document.getElementsByClassName("step")[stepNumber - 1];
+      console.log(step);
+      smoothScroll(step);
+    }
+  })
+  .on("mouseover", function () {
+    d3.select(this)
+      .transition()
+      .duration(400)
+      .style("width", "14px")
+      .style("height", "14px")
+      .style("background", "grey");
+  })
+  .on("mouseout", function () {
+    d3.select(this)
+      .transition()
+      .duration(400)
+      .style("width", "10px")
+      .style("height", "10px")
+      .style("background", "black");
+  });
+
+// get scrollama percentages
+function handleStepProgress(response) {
+  progress = d3
+    .select(`#step${response.index}`)
+    .style("height", `${response.progress * 100}%`)
+    .style("background", "black");
+  // console.log("progress:", progress);
+  // console.log("response:", response);
 }
 
 function handleStepEnter(response) {
@@ -243,6 +313,7 @@ function init() {
       progress: true,
       // debug: true
     })
+    .onStepProgress(handleStepProgress)
     .onStepEnter(handleStepEnter);
 
   // setup resize event

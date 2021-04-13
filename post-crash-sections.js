@@ -40,191 +40,191 @@ function handlePostCrashStepEnter(response) {
   console.log(response.index);
   if (response.index == 0) {
     survivedDied();
-  } else if (response.index == 1){
-      musicianVis();
-  } else if (response.index == 2){
-      firstClassVis();
-  } else if (response.index == 3){
+  } else if (response.index == 1) {
+    musicianVis();
+  } else if (response.index == 2) {
+    firstClassVis();
+  } else if (response.index == 3) {
     womenAndChildrenVis();
-}
+  }
 }
 
 function womenAndChildrenVis() {
-    var dx_ind = 0;
-var ax_ind = 0;
-var dy_ind = 0;
-var ay_ind = 0;
+  var dx_ind = 0;
+  var ax_ind = 0;
+  var dy_ind = 0;
+  var ay_ind = 0;
 
-    womenAndChildren = rawData.filter(
-      (d) => d.Sex == "Female" || d.Adut_or_Chld == "Child"
-    );
-    womenAndChildrenRest = rawData.filter(
-      (d) => !(d.Sex == "Female" || d.Adut_or_Chld == "Child")
-    );
-  
-    sortedwomenAndChildren = womenAndChildren.concat(womenAndChildrenRest);
-  
-    postCrashSVG
-      .selectAll("rect")
-      .data(sortedwomenAndChildren)
-      .attr("x", (d, i) => {
-        var n;
-        if (d.Survived === "Dead") {
-          n = dx_ind % nsrow;
-          dx_ind++;
-          return row(n);
-        } else {
-          n = ax_ind % nsrow;
-          ax_ind++;
-          return row(n) + 600;
-        }
-      })
-      .attr("y", (d, i) => {
-        if (d.Survived === "Alive") {
-          const n = Math.floor(dy_ind / nsrow);
-          dy_ind++;
-          return row(n);
-        } else {
-          const n = Math.floor(ay_ind / nsrow);
-          ay_ind++;
-          return row(n);
-        }
-      })
-      .transition()
-      .duration(700)
-      .attr("fill", (d) => {
-        if (d.Survived == "Alive") {
-          return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-            ? survivedColor
-            : highlightColor;
-        } else {
-          return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-            ? diedColor
-            : highlightColor;
-        }
-      })
-      .attr("id", (d) => {
-        if (d.Survived == "Alive") {
-          return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-            ? "survived-active"
-            : "survived-inactive";
-        } else {
-          return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-            ? "dead-active"
-            : "dead-inactive";
-        }
-      });
-  }
+  womenAndChildren = rawData.filter(
+    (d) => d.Sex == "Female" || d.Adut_or_Chld == "Child"
+  );
+  womenAndChildrenRest = rawData.filter(
+    (d) => !(d.Sex == "Female" || d.Adut_or_Chld == "Child")
+  );
+
+  sortedwomenAndChildren = womenAndChildren.concat(womenAndChildrenRest);
+
+  postCrashSVG
+    .selectAll("rect")
+    .data(sortedwomenAndChildren)
+    .attr("x", (d, i) => {
+      var n;
+      if (d.Survived === "Dead") {
+        n = dx_ind % nsrow;
+        dx_ind++;
+        return row(n);
+      } else {
+        n = ax_ind % nsrow;
+        ax_ind++;
+        return row(n) + 600;
+      }
+    })
+    .attr("y", (d, i) => {
+      if (d.Survived === "Alive") {
+        const n = Math.floor(dy_ind / nsrow);
+        dy_ind++;
+        return row(n);
+      } else {
+        const n = Math.floor(ay_ind / nsrow);
+        ay_ind++;
+        return row(n);
+      }
+    })
+    .transition()
+    .duration(700)
+    .attr("fill", (d) => {
+      if (d.Survived == "Alive") {
+        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
+          ? survivedColor
+          : highlightColor;
+      } else {
+        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
+          ? diedColor
+          : highlightColor;
+      }
+    })
+    .attr("id", (d) => {
+      if (d.Survived == "Alive") {
+        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
+          ? "survived-active"
+          : "survived-inactive";
+      } else {
+        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
+          ? "dead-active"
+          : "dead-inactive";
+      }
+    });
+}
 function firstClassVis() {
-    var dx_ind = 0;
-var ax_ind = 0;
-var dy_ind = 0;
-var ay_ind = 0;
+  var dx_ind = 0;
+  var ax_ind = 0;
+  var dy_ind = 0;
+  var ay_ind = 0;
 
-    first = rawData.filter((d) => d.Class == "1");
-    firstRest = rawData.filter((d) => d.Class != "1");
-  
-    sortedFirst = first.concat(firstRest);
-  
-    postCrashSVG
-      .selectAll("rect")
-      .data(sortedFirst)
-      .attr("x", (d, i) => {
-        var n;
-        if (d.Survived === "Dead") {
-          n = dx_ind % nsrow;
-          dx_ind++;
-          return row(n);
-        } else {
-          n = ax_ind % nsrow;
-          ax_ind++;
-          return row(n) + 600;
-        }
-      })
-      .attr("y", (d, i) => {
-        if (d.Survived === "Dead") {
-          const n = Math.floor(dy_ind / nsrow);
-          dy_ind++;
-          return row(n);
-        } else {
-          const n = Math.floor(ay_ind / nsrow);
-          ay_ind++;
-          return row(n);
-        }
-      })
-      .transition()
-      .duration(700)
-      .attr("fill", (d) => {
-        if (d.Survived == "Alive") {
-          return d.Class == "1" ? survivedColor : highlightColor;
-        } else {
-          return d.Class == "1" ? diedColor : highlightColor;
-        }
-      })
-      .attr("id", (d) => {
-        if (d.Survived == "Alive") {
-          return d.Class == "1" ? "survived-active" : "survived-inactive";
-        } else {
-          return d.Class == "1" ? "dead-active" : "dead-inactive";
-        }
-      });
-  }
+  first = rawData.filter((d) => d.Class == "1");
+  firstRest = rawData.filter((d) => d.Class != "1");
+
+  sortedFirst = first.concat(firstRest);
+
+  postCrashSVG
+    .selectAll("rect")
+    .data(sortedFirst)
+    .attr("x", (d, i) => {
+      var n;
+      if (d.Survived === "Dead") {
+        n = dx_ind % nsrow;
+        dx_ind++;
+        return row(n);
+      } else {
+        n = ax_ind % nsrow;
+        ax_ind++;
+        return row(n) + 600;
+      }
+    })
+    .attr("y", (d, i) => {
+      if (d.Survived === "Dead") {
+        const n = Math.floor(dy_ind / nsrow);
+        dy_ind++;
+        return row(n);
+      } else {
+        const n = Math.floor(ay_ind / nsrow);
+        ay_ind++;
+        return row(n);
+      }
+    })
+    .transition()
+    .duration(700)
+    .attr("fill", (d) => {
+      if (d.Survived == "Alive") {
+        return d.Class == "1" ? survivedColor : highlightColor;
+      } else {
+        return d.Class == "1" ? diedColor : highlightColor;
+      }
+    })
+    .attr("id", (d) => {
+      if (d.Survived == "Alive") {
+        return d.Class == "1" ? "survived-active" : "survived-inactive";
+      } else {
+        return d.Class == "1" ? "dead-active" : "dead-inactive";
+      }
+    });
+}
 function musicianVis() {
-    var dx_ind = 0;
-var ax_ind = 0;
-var dy_ind = 0;
-var ay_ind = 0;
+  var dx_ind = 0;
+  var ax_ind = 0;
+  var dy_ind = 0;
+  var ay_ind = 0;
 
-    musicians = rawData.filter((d) => d.Job == "Musician");
-    rest = rawData.filter((d) => d.Job != "Musician");
-  
-    sortedMusicians = musicians.concat(rest);
-  
-    postCrashSVG
-      .selectAll("rect")
-      .data(sortedMusicians)
-      .attr("x", (d, i) => {
-        var n;
-        if (d.Survived === "Dead") {
-          n = dx_ind % nsrow;
-          dx_ind++;
-          return row(n);
-        } else {
-          n = ax_ind % nsrow;
-          ax_ind++;
-          return row(n) + 600;
-        }
-      })
-      .attr("y", (d, i) => {
-        if (d.Survived === "Dead") {
-          const n = Math.floor(dy_ind / nsrow);
-          dy_ind++;
-          return row(n);
-        } else {
-          const n = Math.floor(ay_ind / nsrow);
-          ay_ind++;
-          return row(n);
-        }
-      })
-      .transition()
-      .duration(700)
-      .attr("fill", (d) => {
-        return d.Job == "Musician" ? diedColor : highlightColor;
-      })
-      .attr("id", (d) => {
-        if (d.Survived == "Alive") {
-          return d.Job == "Musician" ? "survived-active" : "survived-inactive";
-        } else {
-          return d.Job == "Musician" ? "dead-active" : "dead-inactive";
-        }
-      });
-  }
+  musicians = rawData.filter((d) => d.Job == "Musician");
+  rest = rawData.filter((d) => d.Job != "Musician");
+
+  sortedMusicians = musicians.concat(rest);
+
+  postCrashSVG
+    .selectAll("rect")
+    .data(sortedMusicians)
+    .attr("x", (d, i) => {
+      var n;
+      if (d.Survived === "Dead") {
+        n = dx_ind % nsrow;
+        dx_ind++;
+        return row(n);
+      } else {
+        n = ax_ind % nsrow;
+        ax_ind++;
+        return row(n) + 600;
+      }
+    })
+    .attr("y", (d, i) => {
+      if (d.Survived === "Dead") {
+        const n = Math.floor(dy_ind / nsrow);
+        dy_ind++;
+        return row(n);
+      } else {
+        const n = Math.floor(ay_ind / nsrow);
+        ay_ind++;
+        return row(n);
+      }
+    })
+    .transition()
+    .duration(700)
+    .attr("fill", (d) => {
+      return d.Job == "Musician" ? diedColor : highlightColor;
+    })
+    .attr("id", (d) => {
+      if (d.Survived == "Alive") {
+        return d.Job == "Musician" ? "survived-active" : "survived-inactive";
+      } else {
+        return d.Job == "Musician" ? "dead-active" : "dead-inactive";
+      }
+    });
+}
 function survivedDied() {
-    var dx_ind = 0;
-var ax_ind = 0;
-var dy_ind = 0;
-var ay_ind = 0;
-    postCrashSVG
+  var dx_ind = 0;
+  var ax_ind = 0;
+  var dy_ind = 0;
+  var ay_ind = 0;
+  postCrashSVG
     .selectAll("rect")
     .data(rawData)
     .enter()
@@ -342,13 +342,9 @@ function handleClick(d) {
                         }</h1>
                         <h1 id="modal_info">Boarding Location: ${d.Boarded}</h1>
                         <br>
-                        <div style="text-align:center"><a href="https://www.encyclopedia-titanica.org/${
-                          d.Survived == "Alive"
-                            ? "titanic-survivor"
-                            : "titanic-victim"
-                        }/${d.FirstName.split(" ").join("-")}-${
-    d.LastName
-  }.html" class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
+                        <div style="text-align:center"><a href=${
+                          d.url
+                        } class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
 }
 function render2() {
   d3.csv("data/titanic.csv").then(function (data) {

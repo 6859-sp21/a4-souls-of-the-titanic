@@ -387,3 +387,10 @@ figure p {
   color: white;
   font-family: 'Josefin Sans';
 }
+
+.circle {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background: black;
+}
