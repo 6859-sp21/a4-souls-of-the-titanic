@@ -109,27 +109,10 @@
           Start scrolling to explore the real passengers of the Titanic.
         </h3>
       </section>
-      <!-- <section
-        id="crash"
-        style="
-          background-color: black;
-          padding-top: 200px;
-          padding-bottom: 500px;
-        "
-      >
-        <h3
-          style="
-            color: white;
-            font-family: 'Josefin Sans', sans-serif;
-            font-size: 5em;
-          "
-        >
-          The Titanic crashed on April 14, 1912.
-        </h3>
-      </section> -->
+      
 
       <section id="scrolly">
-        <article>
+        <article id="pre-crash-article">
           <div class="step" data-step="0">
             <p class="progress">
               Each square represents a passenger on the Titanic. Hover over each
@@ -156,11 +139,39 @@
               Overall, ____ % class, crew members
             </p>
           </div>
-          <div class="step" id="crash" data-step="5">
+          
+          <div class="step" data-step="10">
             <p>
-              The Titanic crashed on April 14, 1912.
+              Last step
             </p>
           </div>
+        </article>
+
+        <figure id="pre-crash-figure" style="margin-left: 50px">
+          <div style="justify-content: row; display: flex">
+          <div id="area"></div>
+        </figure>
+      </section>
+      <section
+        id="crash"
+        style="
+          background-color: black;
+          padding-top: 200px;
+          padding-bottom: 500px;
+        "
+      >
+        <h3
+          style="
+            color: white;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 5em;
+          "
+        >
+          The Titanic crashed on April 14, 1912.
+        </h3>
+      </section>
+      <section id="post-crash-scrolly">
+        <article id="post-crash-article">
           <div class="step" data-step="6">
             <p>
               Over 1500 people died on the Titanic.
@@ -182,14 +193,13 @@
               Women and children 
             </p>
           </div>
-          <div class="step" data-step="10">
+          <div class="step" data-step="9">
             <p>
-              Last step
+              Last Step
             </p>
           </div>
         </article>
-
-        <figure style="margin-left: 50px">
+        <figure id="post-crash-figure" style="margin-left: 50px">
           <div style="justify-content: row; display: flex">
             <h3
               id="title_died1"
@@ -197,10 +207,10 @@
             ></h3>
             <h3 id="title_survived1" style="color: white; font-size: 20px"></h3>
           </div>
-          <div id="area"></div>
+          <div id="post-crash-area"></div>
         </figure>
+        
       </section>
-
       <section id="outro">
         <!-- Final Visualization -->
         <div style="justify-content: row; display: flex">
@@ -386,6 +396,7 @@
       </section>
     </main>
     <script src="sections.js"></script>
+    <script src="post-crash-sections.js"></script>
     <script src="final.js"></script>
   </body>
 </html>

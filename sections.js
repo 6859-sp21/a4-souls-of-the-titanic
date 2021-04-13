@@ -64,68 +64,6 @@ function handleStepEnter(response) {
   } else if (response.index == 4) {
     classes();
   } else if (response.index == 5) {
-  } else if (response.index == 6) {
-    var dx_ind = 0;
-    var ax_ind = 0;
-    var dy_ind = 0;
-    var ay_ind = 0;
-
-    var m = { top: 5, right: 5, bottom: 30, left: 0 };
-    var w = 1300 - margin.left - margin.right;
-    var h = 1000 - margin.top - margin.bottom;
-    var nsrow = 35;
-
-    svg.attr("width", w).attr("height", h);
-
-    svg
-      .selectAll("rect")
-      .transition()
-      .duration(700)
-      .attr("x", (d, i) => {
-        var n;
-        if (d.Survived === "Dead") {
-          n = dx_ind % nsrow;
-          dx_ind++;
-          return row(n);
-        } else {
-          n = ax_ind % nsrow;
-          ax_ind++;
-          return row(n) + 600;
-        }
-      })
-      .attr("y", (d, i) => {
-        if (d.Survived === "Dead") {
-          const n = Math.floor(dy_ind / nsrow);
-          dy_ind++;
-          return row(n);
-        } else {
-          const n = Math.floor(ay_ind / nsrow);
-          ay_ind++;
-          return row(n);
-        }
-      })
-      .attr("fill", "white")
-      .attr("opacity", 1);
-    svg.selectAll("rect");
-    // died = data.filter(d => d.Survived === "Dead")
-    died = 1496;
-    d3.select("#title_died1").text(
-      `Died: ${died.toString()} Souls, ${Math.round(
-        (died * 100) / 2208
-      ).toString()}% of All Passengers`
-    );
-    survived = 712;
-    d3.select("#title_survived1").text(
-      `Survived: ${survived.toString()} Souls, ${Math.round(
-        (survived * 100) / 2208
-      ).toString()}% of All Passengers`
-    );
-  } else if (response.index == 7) {
-    musicianVis();
-  } else if (response.index == 8) {
-    firstClassVis();
-  } else if (response.index == 9) {
-    womenAndChildrenVis();
   }
   // el.select(".progress").text(d3.format(".1%")(response.progress));
 }
@@ -266,58 +204,7 @@ function queenstownVis() {
   queenstown.exit().remove();
 }
 
-function musicianVis() {
-  var dx_ind = 0;
-  var ax_ind = 0;
-  var dy_ind = 0;
-  var ay_ind = 0;
-  var nsrow = 35;
-  var w = 1300 - margin.left - margin.right;
-  var h = 1000 - margin.top - margin.bottom;
-  musicians = rawData.filter((d) => d.Job == "Musician");
-  rest = rawData.filter((d) => d.Job != "Musician");
 
-  sortedMusicians = musicians.concat(rest);
-
-  svg
-    .selectAll("rect")
-    .data(sortedMusicians)
-    .attr("x", (d, i) => {
-      var n;
-      if (d.Survived === "Dead") {
-        n = dx_ind % nsrow;
-        dx_ind++;
-        return row(n);
-      } else {
-        n = ax_ind % nsrow;
-        ax_ind++;
-        return row(n) + 600;
-      }
-    })
-    .attr("y", (d, i) => {
-      if (d.Survived === "Dead") {
-        const n = Math.floor(dy_ind / nsrow);
-        dy_ind++;
-        return row(n);
-      } else {
-        const n = Math.floor(ay_ind / nsrow);
-        ay_ind++;
-        return row(n);
-      }
-    })
-    .transition()
-    .duration(700)
-    .attr("fill", (d) => {
-      return d.Job == "Musician" ? diedColor : highlightColor;
-    })
-    .attr("id", (d) => {
-      if (d.Survived == "Alive") {
-        return d.Job == "Musician" ? "survived-active" : "survived-inactive";
-      } else {
-        return d.Job == "Musician" ? "dead-active" : "dead-inactive";
-      }
-    });
-}
 
 function firstClassVis() {
   var dx_ind = 0;
@@ -375,74 +262,74 @@ function firstClassVis() {
       }
     });
 }
-function womenAndChildrenVis() {
-  var dx_ind = 0;
-  var ax_ind = 0;
-  var dy_ind = 0;
-  var ay_ind = 0;
-  var nsrow = 35;
-  var w = 1300 - margin.left - margin.right;
-  var h = 1000 - margin.top - margin.bottom;
-  womenAndChildren = rawData.filter(
-    (d) => d.Sex == "Female" || d.Adut_or_Chld == "Child"
-  );
-  womenAndChildrenRest = rawData.filter(
-    (d) => !(d.Sex == "Female" || d.Adut_or_Chld == "Child")
-  );
+// function womenAndChildrenVis() {
+//   var dx_ind = 0;
+//   var ax_ind = 0;
+//   var dy_ind = 0;
+//   var ay_ind = 0;
+//   var nsrow = 35;
+//   var w = 1300 - margin.left - margin.right;
+//   var h = 1000 - margin.top - margin.bottom;
+//   womenAndChildren = rawData.filter(
+//     (d) => d.Sex == "Female" || d.Adut_or_Chld == "Child"
+//   );
+//   womenAndChildrenRest = rawData.filter(
+//     (d) => !(d.Sex == "Female" || d.Adut_or_Chld == "Child")
+//   );
 
-  sortedwomenAndChildren = womenAndChildren.concat(womenAndChildrenRest);
+//   sortedwomenAndChildren = womenAndChildren.concat(womenAndChildrenRest);
 
-  svg
-    .selectAll("rect")
-    .data(sortedwomenAndChildren)
-    .attr("x", (d, i) => {
-      var n;
-      if (d.Survived === "Dead") {
-        n = dx_ind % nsrow;
-        dx_ind++;
-        return row(n);
-      } else {
-        n = ax_ind % nsrow;
-        ax_ind++;
-        return row(n) + 600;
-      }
-    })
-    .attr("y", (d, i) => {
-      if (d.Survived === "Alive") {
-        const n = Math.floor(dy_ind / nsrow);
-        dy_ind++;
-        return row(n);
-      } else {
-        const n = Math.floor(ay_ind / nsrow);
-        ay_ind++;
-        return row(n);
-      }
-    })
-    .transition()
-    .duration(700)
-    .attr("fill", (d) => {
-      if (d.Survived == "Alive") {
-        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-          ? survivedColor
-          : highlightColor;
-      } else {
-        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-          ? diedColor
-          : highlightColor;
-      }
-    })
-    .attr("id", (d) => {
-      if (d.Survived == "Alive") {
-        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-          ? "survived-active"
-          : "survived-inactive";
-      } else {
-        return d.Sex == "Female" || d.Adut_or_Chld == "Child"
-          ? "dead-active"
-          : "dead-inactive";
-      }
-    });
-}
+//   svg
+//     .selectAll("rect")
+//     .data(sortedwomenAndChildren)
+//     .attr("x", (d, i) => {
+//       var n;
+//       if (d.Survived === "Dead") {
+//         n = dx_ind % nsrow;
+//         dx_ind++;
+//         return row(n);
+//       } else {
+//         n = ax_ind % nsrow;
+//         ax_ind++;
+//         return row(n) + 600;
+//       }
+//     })
+//     .attr("y", (d, i) => {
+//       if (d.Survived === "Alive") {
+//         const n = Math.floor(dy_ind / nsrow);
+//         dy_ind++;
+//         return row(n);
+//       } else {
+//         const n = Math.floor(ay_ind / nsrow);
+//         ay_ind++;
+//         return row(n);
+//       }
+//     })
+//     .transition()
+//     .duration(700)
+//     .attr("fill", (d) => {
+//       if (d.Survived == "Alive") {
+//         return d.Sex == "Female" || d.Adut_or_Chld == "Child"
+//           ? survivedColor
+//           : highlightColor;
+//       } else {
+//         return d.Sex == "Female" || d.Adut_or_Chld == "Child"
+//           ? diedColor
+//           : highlightColor;
+//       }
+//     })
+//     .attr("id", (d) => {
+//       if (d.Survived == "Alive") {
+//         return d.Sex == "Female" || d.Adut_or_Chld == "Child"
+//           ? "survived-active"
+//           : "survived-inactive";
+//       } else {
+//         return d.Sex == "Female" || d.Adut_or_Chld == "Child"
+//           ? "dead-active"
+//           : "dead-inactive";
+//       }
+//     });
+// }
 
 function classes() {
   firstClass = rawData.filter((d) => d.Class == "1");
@@ -472,7 +359,7 @@ function classes() {
 function init() {
   // 1. force a resize on load to ensure proper dimensions are sent to scrollama
   handleResize();
-~
+
   // 2. setup the scroller passing options
   // 		this will also initialize trigger observations
   // 3. bind scrollama event handlers (this can be chained like below)
