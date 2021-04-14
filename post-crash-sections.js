@@ -14,7 +14,7 @@ var m = { top: 5, right: 5, bottom: 30, left: 0 };
 var nsrow = 35;
 
 var rawData;
-d3.csv("data/titanic.csv").then(function (data) {
+d3.csv("./data/titanic.csv").then(function (data) {
   rawData = data;
 });
 
@@ -235,6 +235,7 @@ function survivedDied() {
   var ax_ind = 0;
   var dy_ind = 0;
   var ay_ind = 0;
+  
   postCrashSVG.selectAll("rect").attr("fill", "white");
   console.log(postCrashSVG.selectAll("rect"));
   postCrashSVG
@@ -278,17 +279,7 @@ function survivedDied() {
     .on("click", handleClick)
     .on("mouseout", handleMouseOut);
   died = 1496;
-  d3.select("#title_died1").text(
-    `Died: ${died.toString()} Souls, ${Math.round(
-      (died * 100) / 2208
-    ).toString()}% of All Passengers`
-  );
-  survived = 712;
-  d3.select("#title_survived1").text(
-    `Survived: ${survived.toString()} Souls, ${Math.round(
-      (survived * 100) / 2208
-    ).toString()}% of All Passengers`
-  );
+  
 }
 function init() {
   handleResize();
@@ -361,9 +352,19 @@ function handleClick(d) {
                         } class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
 }
 function render2() {
-  d3.csv("data/titanic.csv").then(function (data) {
+  d3.csv("./data/titanic.csv").then(function (data) {
     // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
-    d3.select("#title_died1").text(`Titanic: 2208 Souls`);
+    d3.select("#post-crash-title-died").text(
+      `Died: ${died.toString()} Souls, ${Math.round(
+        (died * 100) / 2208
+      ).toString()}% of All Passengers`
+    );
+    survived = 712;
+    d3.select("#post-crash-title-died").text(
+      `Survived: ${survived.toString()} Souls, ${Math.round(
+        (survived * 100) / 2208
+      ).toString()}% of All Passengers`
+    );
   });
 }
 

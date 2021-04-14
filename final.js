@@ -194,7 +194,7 @@ function inAgeRange(rangeList, age) {
 
     // Render Grids
     function render() {
-      d3.csv("../data/titanic.csv").then(function (data) {
+      d3.csv("./data/titanic.csv").then(function (data) {
         // data = filter(data)
         unhighlight();
         console.log('good')

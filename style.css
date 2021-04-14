@@ -60,12 +60,29 @@ h3#title_survived1 {
   font-weight: 500;
 }
 
+
+h3#post-crash-title-died{
+  color:whitesmoke;
+  font-size: 25px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 500;
+}
+
+h3#post-crash-title-survived{
+  color:whitesmoke;
+  font-size: 25px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 500;
+}
+
 h3#activeFilterTitle {
   color:whitesmoke;
   font-size: 20px;
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 500;
 }
+
+
 
 #splide {
   width: 100px;
@@ -392,7 +409,6 @@ a:hover {
 
 
 #intro {
-  height: 50rem;
   text-align: center;
   background-size: cover;
 }
@@ -405,7 +421,7 @@ a:hover {
   display: flex;
   padding-top: 200px; 
   padding-bottom: 500px; 
-  height: 150vh;
+  height: 125vh;
 
   transition: 0.2s all linear;
   -webkit-transition:background-color 0.2s;
@@ -581,4 +597,71 @@ figure p {
   width: 10px;
   height: 10px;
   background: black;
+  cursor: pointer;
+}
+
+/* arrow on title page */
+.arrow,
+.arrow:before {
+  position: absolute;
+  left: 50%;
+}
+
+.arrow {
+  width: 40px;
+  height: 40px;
+  top: 30%;
+  margin: -20px 0 0 -20px;
+  -webkit-transform: rotate(45deg);
+  border-left: none;
+  border-top: none;
+  border-right: 2px black solid;
+  border-bottom: 2px black solid;
+}
+
+.arrow:before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  top: 30%;
+  margin: -3px 0 0 -10px;
+  border-left: none;
+  border-top: none;
+  border-right: 1px black solid;
+  border-bottom: 1px black solid;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-name: arrow;
+}
+
+@keyframes arrow {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-10px, -10px);
+  }
+}
+
+/* audio sound player */
+input#un-mute {
+  display: none;
+}
+
+.mute img {
+  display: none;
+  cursor: pointer;
+}
+
+.unmute img {
+  cursor: pointer;
+}
+
+input#un-mute:checked~.mute img {
+  display: initial;
+}
+
+input#un-mute:checked~.unmute img {
+  display: none;
 }
