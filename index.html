@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Souls of the Titanic</title>
+    <meta name="description" content="Souls of the Titanic" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;500;700&family=Limelight&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
+    <script src="./node_modules/scrollama/build/scrollama.min.js"></script>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"
+    />
+    <style>
+      #scrolly {
+        position: relative;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        background-color: black;
+        padding: 1rem;
+      }
+      #outro {
+        background-color: black;
+        padding-top: 500px;
+      }
+      #scrolly > * {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+      }
+
+      article {
+        position: relative;
+        padding: 0 1rem;
+        max-width: 20rem;
+      }
+
+      figure {
+        position: sticky;
+        width: 100%;
+        margin: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        -moz-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        z-index: 0;
+      }
+
+      figure p {
+        text-align: center;
+        padding: 1rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -moz-transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        font-size: 8rem;
+        font-weight: 900;
+        color: #fff;
+      }
+
+      .step {
+        margin: 0 auto 20rem auto;
+        background-color: #adabab;
+        color: white;
+      }
+
+      .step:last-child {
+        margin-bottom: 0;
+      }
+
+      .step.is-active {
+        color: whitesmoke;
+      }
+
+      .step p {
+        text-align: center;
+        padding: 1rem;
+        font-size: 1.5rem;
+        color: white;
+        font-family: "Josefin Sans";
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <section
+        id="intro"
+        style="background-image: url('../titanic.jpeg'); height: 125vh"
+      >
+        <h1 id="title" style="opacity: 0" class="intro__hed">h</h1>
+        <h1 id="title" style="color: black" class="intro__hed">
+          Souls of the Titanic
+        </h1>
+        <h3
+          style="color: black; font-family: 'Josefin Sans', sans-serif"
+          class="intro__dek"
+        >
+          Start scrolling to explore the real passengers of the Titanic.
+        </h3>
+      </section>
+
+      <section id="scrolly" style="background-color: #d5d0d0">
+        <article id="pre-crash-article">
+          <div class="step" data-step="0">
+            <p class="progress">
+              Each square represents a passenger on the Titanic. Hover over each
+              square to learn more. 
+              This square represents Dorothy Gibson, the real life figure who inspired Rose from the Titanic movie.
+            </p>
+          </div>
+          <div class="step" data-step="1">
+            <p class="progress">
+              The Titanic was built in Belfast, and crew members departed there before the official journey began.
+            </p>
+          </div>
+          <div class="step" data-step="2">
+            <p> 
+              The Titanic departed from Southampton, England on its maiden voyage across the Atlantic Ocean. 
+            </p>
+          </div>
+          <div class="step" data-step="3">
+            <p>
+              The Titanic stopped in Cherbourg, France to pick up passengers.
+            </p>
+          </div>
+          <div class="step" data-step="4">
+            <p> Finally, the Titanic stopped in Queenstown, Ireland to pick up its last passengers before heading to New York City</p>
+          </div>
+          <div class="step" data-step="5">
+            <p> 3rd class passengers was the largest source of the Titanic's profit and were over half of the passengers. </p>
+          </div>
+          <div class="step" data-step="6">
+            <p>Last step</p>
+          </div>
+        </article>
+
+    
+        <figure
+          id="pre-crash-figure"
+          style="margin-left: 50px; flex-direction: row; display: flex"
+        >
+          <div style="flex-direction: column; display: flex">
+            <div style="flex-direction: row; display: flex">
+              <h3
+                id="title_died1"
+                style="color: white; font-size: 20px; width: 600px"
+              ></h3>
+              <h3
+                id="title_survived1"
+                style="color: white; font-size: 20px"
+              ></h3>
+            </div>
+            <div id="area"></div>
+          </div>
+          <div
+            id="timeline"
+            style="
+              display: flex;
+              flex-direction: column;
+              height: 700px;
+              align-items: center;
+            "
+          >
+            <div class="circle" id="circle0">
+              <h2
+                style="
+                  transform: translateX(200%) translateY(-5%);
+                  font-family: 'Josefin Sans', sans-serif;
+                  font-size: 15px;
+                "
+              >
+                Start
+              </h2>
+            </div>
+            <div style="flex: 1; height: 100; width: 3px">
+              <div id="step0" style="height: 0%"></div>
+            </div>
+            <div class="circle" id="circle1">
+              <h2
+                style="
+                  transform: translateX(200%) translateY(-5%);
+                  font-family: 'Josefin Sans', sans-serif;
+                  font-size: 15px;
+                "
+              >
+                Belfast, England
+              </h2>
+            </div>
+            <div style="flex: 1; height: 100; width: 3px">
+              <div id="step1" style="height: 0%"></div>
+            </div>
+            <div class="circle" id="circle2">
+              <h2
+                style="
+                  transform: translateX(200%) translateY(-5%);
+                  font-family: 'Josefin Sans', sans-serif;
+                  font-size: 15px;
+                "
+              >
+                Southampton, England
+              </h2>
+            </div>
+            <div style="flex: 1; height: 100; width: 3px">
+              <div id="step2" style="height: 0%"></div>
+            </div>
+            <div class="circle" id="circle3">
+              <h2
+                style="
+                  transform: translateX(200%) translateY(-5%);
+                  font-family: 'Josefin Sans', sans-serif;
+                  font-size: 15px;
+                "
+              >
+                Cherbourg, France
+              </h2>
+            </div>
+            <div style="flex: 1; height: 100; width: 3px">
+              <div id="step3" style="height: 0%"></div>
+            </div>
+            <div class="circle" id="circle4">
+              <h2
+                style="
+                  transform: translateX(200%) translateY(-5%);
+                  font-family: 'Josefin Sans', sans-serif;
+                  font-size: 15px;
+                "
+              >
+                Queensland, Ireland
+              </h2>
+            </div>
+            <div style="flex: 1; height: 100; width: 3px">
+              <div id="step4" style="height: 0%"></div>
+            </div>
+            <div class="circle" id="circle5">
+              <h2
+                style="
+                  transform: translateX(200%) translateY(-5%);
+                  font-family: 'Josefin Sans', sans-serif;
+                  font-size: 15px;
+                "
+              >
+                New York, USA
+              </h2>
+            </div>
+          </div>
+        </figure>
+      </section>
+      <section id="crash">
+        <h3
+          style="
+            color: white;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 5em;
+          "
+        >
+          The Titanic crashed on April 14, 1912.
+        </h3>
+      </section>
+      <section id="post-crash-scrolly">
+        <article id="post-crash-article">
+          <div class="step" data-step="6">
+            <p> There were only 16 lifeboats on the Titanic, and 4 collapsible lifeboats with a total capacity of 1178.</p>
+          </div>
+          <div class="step" data-step="7">
+            <p>The musicians made no attempt to save themselves, playing “Nearer, My God, to Thee” to calm people down as the ship was sinking.  </p>
+          </div>
+          <div class="step" data-step="8">
+            <p>
+              Passengers traveling first class on Titanic were roughly 44
+              percent more likely to survive than other passengers.
+            </p>
+          </div>
+          <div class="step" data-step="9">
+            <p>Although women and children were required on lifeboats first, because of the disorderly process, many of the victims were women and children. </p>
+          </div>
+          <div class="step" data-step="9">
+            <p>Last Step</p>
+          </div>
+        </article>
+        <figure id="post-crash-figure" style="margin-left: 50px; flex-direction: row; display: flex">
+          <div style="flex-direction: column; display: flex">
+            <div style="flex-direction: row; display: flex">
+              <h3
+              id="post-crash-title-died"
+              style="color: white; font-size: 20px; width: 600px"
+            ></h3>
+            <h3 id="post-crash-title-survived" style="color: white; font-size: 20px"></h3>
+            </div>
+          <div id="post-crash-area"></div>
+        </figure>
+      </section>
+      <section id="outro">
+        <!-- Final Visualization -->
+        <div style="justify-content: row; display: flex">
+          <div style="margin-left: 50px">
+            <h1 id="title" style="margin-top: 30px">Souls of the Titanic</h1>
+            <div style="margin-top: 30px">
+              <h3 id="activeFilterTitle"></h3>
+            </div>
+            <div style="flex-direction: row; display: flex; margin-top: 50px">
+              <div
+                style="
+                  width: 200px;
+                  height: 1000px;
+                  display: block;
+                  text-align: left;
+                "
+              >
+                <div style="display: inline-block; width: 200px">
+                  <h1 id="filter_category">People</h1>
+                  <h1 class="people-label">
+                    (track your favorite titanic character: click a name!)
+                  </h1>
+                  <!-- Slideshow container -->
+                  <div class="slideshow-container">
+                    <!-- Full-width images with number and caption text -->
+                    <div class="mySlides fade">
+                      <!-- <div class="numbertext">1 / 3</div> -->
+                      <div class="img-container">
+                        <img src="img/dorothy.png" style="width: 130px" />
+                      </div>
+                      <label class="container">
+                        <input
+                          type="checkbox"
+                          id="Dorothy"
+                          checked="check"
+                          onclick="updateFinding(); render();"
+                        />
+                        <div class="custom-label">Dorothy Gibson</div>
+                        <span class="checkmark"></span>
+                      </label>
+                      <h3 class="custom-description">(If Rose were real)</h3>
+                    </div>
+
+                    <div class="mySlides fade">
+                      <!-- <div class="numbertext">2 / 3</div> -->
+                      <div class="img-container">
+                        <img src="img/wallace.png" style="width: 130px" />
+                      </div>
+                      <label class="container">
+                        <input
+                          type="checkbox"
+                          id="Wallace"
+                          onclick="updateFinding(); render();"
+                        />
+                        <div class="custom-label">Wallace Hartley</div>
+                        <span class="checkmark"></span>
+                      </label>
+                      <h3 class="custom-description">(One of the musicians)</h3>
+                    </div>
+
+                    <div class="mySlides fade">
+                      <!-- <div class="numbertext">3 / 3</div> -->
+                      <div class="img-container">
+                        <img src="img/edward.png" style="width: 130px" />
+                      </div>
+                      <label class="container">
+                        <input
+                          type="checkbox"
+                          id="Edward"
+                          onclick="updateFinding(); render();"
+                        />
+                        <div class="custom-label">Captain Edward J. Smith</div>
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                    <div class="mySlides fade">
+                      <div class="img-container">
+                        <img src="img/margaret.png" style="width: 130px" />
+                      </div>
+                      <label class="container">
+                        <input
+                          type="checkbox"
+                          id="Margaret"
+                          onclick="updateFinding(); render();"
+                        />
+                        <div class="custom-label">Margaret Brown</div>
+                        <span class="checkmark"></span>
+                      </label>
+                      <h3 class="custom-description">("Unsinkable Molly")</h3>
+                    </div>
+
+                    <!-- Next and previous buttons -->
+                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                  </div>
+                  <br />
+
+                  <!-- The dots/circles -->
+                  <div
+                    style="width: 130px; text-align: center; margin-bottom: 7px"
+                  >
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                    <span class="dot" onclick="currentSlide(3)"></span>
+                    <span class="dot" onclick="currentSlide(4)"></span>
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    display: inline-block;
+                    width: 100px;
+                    margin-right: 70px;
+                  "
+                >
+                  <h1 id="filter_category">Gender</h1>
+                  <label class="container">
+                    <input
+                      type="checkbox"
+                      id="Male"
+                      onclick="updateFilter(); render();"
+                    />
+                    <div class="custom-label">Male</div>
+                    <span class="checkmark"></span>
+                  </label>
+                  <label class="container">
+                    <input
+                      type="checkbox"
+                      id="Female"
+                      onclick="updateFilter(); render();"
+                    />
+                    <div class="custom-label">Female</div>
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+                <div style="display: inline-block; width: 200px">
+                  <h1 id="filter_category">Class</h1>
+                  <label class="container">
+                    <input
+                      type="checkbox"
+                      id="1"
+                      onclick="updateFilter(); render();"
+                    />
+                    <div class="custom-label">1st Class</div>
+                    <span class="checkmark"></span>
+                  </label>
+                  <label class="container">
+                    <input
+                      type="checkbox"
+                      id="2"
+                      onclick="updateFilter(); render();"
+                    />
+                    <div class="custom-label">2nd Class</div>
+                    <span class="checkmark"></span>
+                  </label>
+                  <label class="container">
+                    <input
+                      type="checkbox"
+                      id="3"
+                      onclick="updateFilter(); render();"
+                    />
+                    <div class="custom-label">3rd Class</div>
+                    <span class="checkmark"></span>
+                  </label>
+                  <label class="container">
+                    <input
+                      type="checkbox"
+                      id="Crew"
+                      onclick="updateFilter(); render();"
+                    />
+                    <div class="custom-label">Crew</div>
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+                <div style="display: inline-block; width: 200px">
+                  <h1 id="filter_category">Age</h1>
+                  <label class="container">
+                    <input
+                      type="checkbox"
+                      id="ageGroup1"
+                      onclick="updateFilter(); render();"
+                    />
+                    <div class="custom-label">0-17 Years</div>
+                    <span class="checkmark"></span>
+                  </label>
+                  <label class="container">
+                    <input
+                      type="checkbox"
+                      id="ageGroup2"
+                      onclick="updateFilter(); render();"
+                    />
+                    <div class="custom-label">18-35 Years</div>
+                    <span class="checkmark"></span>
+                  </label>
+                  <label class="container">
+                    <input
+                      type="checkbox"
+                      id="ageGroup3"
+                      onclick="updateFilter(); render();"
+                    />
+                    <div class="custom-label">35-50 Years</div>
+                    <span class="checkmark"></span>
+                  </label>
+                  <label class="container">
+                    <input
+                      type="checkbox"
+                      id="ageGroup4"
+                      onclick="updateFilter(); render();"
+                    />
+                    <div class="custom-label">50-75 Years</div>
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+              </div>
+              <div>
+                <h3 id="title_died"></h3>
+                <div id="final_died"></div>
+              </div>
+              <div>
+                <h3 id="title_survived"></h3>
+                <div id="final_survived"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal -->
+          <div
+            id="myModal"
+            style="border: 2px solid whitesmoke; background-color: black"
+            class="modal"
+          ></div>
+        </div>
+      </section>
+    </main>
+    <script src="sections.js"></script>
+    <script src="post-crash-sections.js"></script>
+    <script src="final.js"></script>
+    <script src="slides.js"></script>
+    <script>
+      //crash change theme
+      var elmnt2 = document.getElementById("scrolly");
+      var elmnt3 = document.getElementById("intro");
+      var y = elmnt2.scrollHeight + elmnt3.scrollHeight;
+      $(window).on("scroll", function () {
+        if ($(window).scrollTop() > y) {
+          $("#crash").addClass("on-scroll");
+        } else {
+          $("#crash").removeClass("on-scroll");
+        }
+      });
+    </script>
+  </body>
+</html>

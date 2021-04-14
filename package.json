@@ -1,0 +1,23 @@
+{
+  "name": "a4-souls-of-the-titanic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/6859-sp21/a4-souls-of-the-titanic.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/6859-sp21/a4-souls-of-the-titanic/issues"
+  },
+  "homepage": "https://github.com/6859-sp21/a4-souls-of-the-titanic#readme",
+  "dependencies": {
+    "intersection-observer": "^0.12.0",
+    "scrollama": "^2.2.2"
+  }
+}
