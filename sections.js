@@ -17,6 +17,13 @@ const colorMap = {
   Crew: "#BE8275",
 };
 
+const classMap = {
+  1: "first",
+  2: "second",
+  3: "third",
+  Crew: "crewMembers"
+}
+
 var main = d3.select("main");
 var scrolly = main.select("#scrolly");
 var figure = scrolly.select("figure");
@@ -159,6 +166,8 @@ function singleSquare() {
 
   dorothy.transition().duration(500);
 
+  d3.select("#title_died1").text(`Titanic Passengers: 1 Soul`);
+
   dorothy.exit().remove();
 }
 function belfastVis() {
@@ -272,6 +281,7 @@ function cherbourgVis() {
 }
 
 function queenstownVis() {
+  svg.selectAll("rect").remove();
   const queenstownData = rawData.filter(
     (d) =>
       d.Boarded === "Belfast" ||
@@ -312,6 +322,7 @@ function queenstownVis() {
 }
 
 function classes() {
+  svg.selectAll("rect").remove();
   firstClass = rawData.filter((d) => d.Class == "1");
   secondClass = rawData.filter((d) => d.Class == "2");
   thirdClass = rawData.filter((d) => d.Class == "3");
@@ -322,16 +333,33 @@ function classes() {
   allData5 = allData4.concat(crew);
 
   svg
-    .selectAll("rect")
+    .selectAll('rect')
     .data(allData5)
-    .attr("fill", (d, i) => {
-      return colorMap[d.Class];
+    .enter()
+    .append("rect")
+    .attr("x", (d, i) => {
+      const n = i % numSoulRow1;
+      return row(n);
+    })
+    .attr("y", (d, i) => {
+      const n = Math.floor(i / numSoulRow1);
+      return row(n);
     })
     .attr("rx", 3)
     .attr("ry", 3)
+    .attr("width", squareSize1)
+    .attr("height", squareSize1)
+    .attr("stroke-width", strokeWidth1)
+    .attr("stroke", "white")
+    .attr("fill", (d, i) => {
+      return colorMap[d.Class];
+    })
     .attr("id", (d) => {
-      return d.Class;
-    });
+      return classMap[d.Class];
+    })
+    .on("mouseover", handleMouseOver)
+    .on("mouseout", handleMouseOut)
+    .on("click", handleClick);
 
     classes_title = d3.select("#title_died1").text(`Titanic Passengers: `);
     classes_title.append("text").text(`${firstClass.length} Souls in 1st Class, `).style('color', colorMap[1]);
@@ -361,11 +389,13 @@ function init() {
   // setup resize event
   window.addEventListener("resize", handleResize);
 }
+
 function handleMouseOut(d) {
-  console.log(d3.select(this).attr("id"));
-  d3.select(this).style("fill", function () {
-    if (d3.select(this).attr("class") == "class-active") {
-      return colorMap[d3.select(this).attr("id")];
+  console.log('id', d3.select(this).attr("id"));
+  var id = d3.select(this).attr("id");
+  d3.select(this).style('fill', function () {
+    if (id==="first" || id==="second" || id==="third" || id==="crewMembers") {
+      return colorMap[id];
     } else {
       console.log("here");
       if (d3.select(this).attr("id") == "survived-active") {
@@ -382,6 +412,7 @@ function handleMouseOut(d) {
       }
     }
   });
+  d3.select(this).style('opacity', 1)
 
   // tooltip
   tooltip.transition().duration(30).style("opacity", 0);
@@ -410,9 +441,8 @@ var tooltip = d3
   .attr("class", "tooltip")
   .style("opacity", 0);
 function handleMouseOver(d) {
-  d3.select(this).style("fill", "black");
+  d3.select(this).style("fill", "gray");
   d3.select(this).style("opacity", 0.5);
-  d3.select(this).style('stroke', 'black').attr('stroke-width', 1)
 
   // tooltip
   tooltip.transition().duration(30).style("opacity", 1);

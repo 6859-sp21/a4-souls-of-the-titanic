@@ -103,7 +103,6 @@ function updateFilter() {
       if (curFilter[f] === undefined) filterCount += 1;
       else {
         filterTitle += titleMap[curFilter[f].toString()] + ", ";
-        console.log(curFilter[f].toString());
       }
     }
     noSelectCount += filterCount;
@@ -171,7 +170,13 @@ function inAgeRange(rangeList, age) {
 
     function findPerson(firstName, lastName) {
       // find the person and highlight their square
-      person = d3
+      svg_died
+        .selectAll('rect')
+        .filter((d) => d.FirstName.toLowerCase().includes(firstName.toLowerCase()) 
+                      && d.LastName.toLowerCase().includes(lastName.toLowerCase()))
+        .attr('stroke', '#e37059')
+        .attr('stroke-width', 5)
+      svg_survived
         .selectAll('rect')
         .filter((d) => d.FirstName.toLowerCase().includes(firstName.toLowerCase()) 
                       && d.LastName.toLowerCase().includes(lastName.toLowerCase()))
@@ -371,7 +376,8 @@ function inAgeRange(rangeList, age) {
 
     //TODO use unhighlight somewhere
     function unhighlight() {
-      d3.selectAll("rect").remove();
+      svg_died.selectAll("rect").remove();
+      svg_survived.selectAll("rect").remove();
     }
   });
 }
