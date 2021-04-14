@@ -71,7 +71,9 @@ Annie: I spent about 3 hours looking for datasets, 2 hours cleaning and preproce
 # Sources
 
 Data from: https://dasl.datadescription.com/datafile/titanic/?_sfm_cases=500+59943&sf_paged=6 and http://www.encyclopedia-titanica.org 
+
 Final Visualization Inspiration: https://fivethirtyeight.com/features/gun-deaths/ 
+
 Scrollytelling Inspiration: https://www.nytimes.com/newsgraphics/2013/10/13/russia/index.html 
 
 
