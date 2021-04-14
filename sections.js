@@ -42,7 +42,7 @@ var scroller = scrollama();
 // generic window resize listener event
 function handleResize() {
   // 1. update height of step elements
-  var stepH = Math.floor(window.innerHeight * 0.25);
+  var stepH = Math.floor(window.innerHeight * 0.4);
   step.style("height", stepH + "px");
   crash.style("height", window.innerHeight + "px");
   crash.attr("zIndex", 5);

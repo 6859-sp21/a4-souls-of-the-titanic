@@ -22,7 +22,7 @@ var scroller = scrollama();
 
 function handleResize() {
   // 1. update height of step elements
-  var stepH = Math.floor(window.innerHeight * 0.25);
+  var stepH = Math.floor(window.innerHeight * 0.4);
   postCrashStep.style("height", stepH + "px");
 
   var figureHeight = window.innerHeight * 0.8;
