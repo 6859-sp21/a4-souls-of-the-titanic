@@ -90,21 +90,26 @@ h3#activeFilterTitle {
   font-weight: 500;
 }
 
-
-
-#splide {
-  width: 100px;
-  height:220px;
+#step-style {
+  display: flex;
+  align-items: center;
+  background-color: #a5a3a3;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
-.splide-container {
-  height:220px;
+#step-style-post {
+  display: flex;
+  align-items: center;
+  background-color: #a5a3a3;
+  box-shadow: rgba(255, 255, 255, 0.15) 0px 14px 20px, rgba(255, 255, 255, 0.12) 0px 10px 10px;
 }
 
-.splide__slide2 {
-  display: block;
+p#section-text {
+  position: relative;
+  font-size: 2.1vh;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 500;
 }
-
 .img-container {
   display: block;
   text-align: center;
