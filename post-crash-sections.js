@@ -54,24 +54,19 @@ function womenAndChildrenVis() {
   var ax_ind = 0;
   var dy_ind = 0;
   var ay_ind = 0;
+
+  postCrashSVG.selectAll("rect").remove();
+
+  wacData = rawData.filter((d) => (d.Sex == "Female" || d.Adut_or_Chld == "Child"))
+  wacRest = rawData.filter((d) => !(d.Sex == "Female" || d.Adut_or_Chld == "Child") )
   
+  wacTotal = wacData.concat(wacRest);
+
   postCrashSVG
     .selectAll("rect")
-    .sort(function (a, b) {
-      if (
-        (a.Sex == "Female" || a.Adut_or_Chld == "Child") &&
-        !(b.Sex == "Female" || b.Adut_or_Chld == "Child")
-      ) {
-        return -1;
-      } else if (
-        !(a.Sex == "Female" || a.Adut_or_Chld == "Child") &&
-        (b.Sex == "Female" || b.Adut_or_Chld == "Child")
-      ) {
-        return 1;
-      } else {
-        return 0;
-      }
-    })
+    .data(wacTotal)
+    .enter()
+    .append("rect")
     .attr("x", (d, i) => {
       var n;
       if (d.Survived === "Dead") {
@@ -116,8 +111,33 @@ function womenAndChildrenVis() {
           ? "dead-active"
           : "dead-inactive";
       }
-    });
+    }).attr("opacity", 1)
+    .attr("width", squareSize1)
+    .attr("height", squareSize1)
+    .attr("stroke-width", strokeWidth1)
+    .attr("stroke", "white")
+    .attr("rx", 3)
+    .attr("ry", 3)
+    .on("mouseover", handleMouseOver)
+    .on("click", handleClick)
+    .on("mouseout", handleMouseOut);
     postCrashSVG.exit().remove()
+
+    died_wac = rawData.filter((d) => (d.Sex == "Female" || d.Adut_or_Chld == "Child") && d.Survived === "Dead");
+    survived_wac = rawData.filter((d) => (d.Sex == "Female" || d.Adut_or_Chld == "Child") && d.Survived === "Alive");
+    died = 1496;
+
+  d3.select("#post-crash-title-died").text(
+    `Died: ${died_wac.length.toString()} Souls, ${Math.round(
+      (died_wac.length * 100) / died
+    ).toFixed(1).toString()}% of Total Victims`
+  );
+  survived = 712;
+  d3.select("#post-crash-title-survived").text(
+    `Survived: ${survived_wac.length.toString()} Souls, ${Math.round(
+      (survived_wac.length * 100) / survived
+    ).toFixed(1).toString()}% of Total Survivors`
+  );
 }
 function firstClassVis() {
   var dx_ind = 0;
@@ -130,17 +150,13 @@ function firstClassVis() {
 
   sortedFirst = first.concat(firstRest);
 
+  postCrashSVG.selectAll("rect").remove();
+
   postCrashSVG
     .selectAll("rect")
-    .sort(function (a, b) {
-      if (a.Class == "1" && b.Class != "1") {
-        return -1;
-      } else if (a.Class != "1" && b.Class == "1") {
-        return 1;
-      } else {
-        return 0;
-      }
-    })
+    .data(sortedFirst)
+    .enter()
+    .append("rect")
     .attr("x", (d, i) => {
       var n;
       if (d.Survived === "Dead") {
@@ -177,7 +193,33 @@ function firstClassVis() {
       } else {
         return d.Class == "1" ? "dead-active" : "dead-inactive";
       }
-    });
+    })
+    .attr("opacity", 1)
+    .attr("width", squareSize1)
+    .attr("height", squareSize1)
+    .attr("rx", 3)
+    .attr("ry", 3)
+    .attr("stroke-width", strokeWidth1)
+    .attr("stroke", "white")
+    .on("mouseover", handleMouseOver)
+    .on("click", handleClick)
+    .on("mouseout", handleMouseOut);
+
+    died_firstClass = rawData.filter((d) => d.Class=== "1" && d.Survived === "Dead");
+    survived_firstClass = rawData.filter((d) => d.Class=== "1" && d.Survived === "Alive");
+    died = 1496;
+
+  d3.select("#post-crash-title-died").text(
+    `Died: ${died_firstClass.length.toString()} Souls, ${Math.round(
+      (died_firstClass.length * 100) / died
+    ).toFixed(1).toString()}% of Total Victims`
+  );
+  survived = 712;
+  d3.select("#post-crash-title-survived").text(
+    `Survived: ${survived_firstClass.length.toString()} Souls, ${Math.round(
+      (survived_firstClass.length * 100) / survived
+    ).toFixed(1).toString()}% of Total Survivors`
+  );
 }
 function musicianVis() {
   var dx_ind = 0;
@@ -185,17 +227,18 @@ function musicianVis() {
   var dy_ind = 0;
   var ay_ind = 0;
 
+  postCrashSVG.selectAll("rect").remove();
+
+  musicianD = rawData.filter((d) => d.Job === "Musician");
+  restMusican = rawData.filter((d) => d.Job != "Musician");
+  allMusician = musicianD.concat(restMusican)
+
+  console.log(allMusician);
   postCrashSVG
     .selectAll("rect")
-    .sort(function (a, b) {
-      if (a.Job == "Musician" && b.Job != "Musician") {
-        return -1;
-      } else if (a.Job != "Musician" && b.Job == "Musician") {
-        return 1;
-      } else {
-        return 0;
-      }
-    })
+    .data(allMusician)
+    .enter()
+    .append("rect")
     .attr("x", (d, i) => {
       var n;
       if (d.Survived === "Dead") {
@@ -228,13 +271,40 @@ function musicianVis() {
       } else {
         return d.Job == "Musician" ? "dead-active" : "dead-inactive";
       }
-    });
+    })
+    .attr("opacity", 1)
+    .attr("width", squareSize1)
+    .attr("height", squareSize1)
+    .attr("rx", 3)
+    .attr("ry", 3)
+    .attr("stroke-width", strokeWidth1)
+    .attr("stroke", "white")
+    .on("mouseover", handleMouseOver)
+    .on("click", handleClick)
+    .on("mouseout", handleMouseOut);
+    ;
+died_musicians = rawData.filter((d) => d.Job === "Musician" && d.Survived === "Dead");
+    died = 1496;
+
+  d3.select("#post-crash-title-died").text(
+    `Died: ${died_musicians.length.toString()} Souls, ${Math.round(
+      (died_musicians.length * 100) / died
+    ).toFixed(1).toString()}% of Total Victims`
+  );
+  survived = 712;
+  d3.select("#post-crash-title-survived").text(
+    `Survived: ${0} Souls, ${Math.round(
+      (0) / survived
+    ).toFixed(1).toString()}% of Total Survivors`
+  );
 }
 function survivedDied() {
   var dx_ind = 0;
   var ax_ind = 0;
   var dy_ind = 0;
   var ay_ind = 0;
+
+  postCrashSVG.selectAll("rect").remove();
   
   postCrashSVG.selectAll("rect").attr("fill", "white");
   console.log(postCrashSVG.selectAll("rect"));
@@ -243,8 +313,6 @@ function survivedDied() {
     .data(rawData)
     .enter()
     .append("rect")
-    .transition()
-    .duration(700)
     .attr("x", (d, i) => {
       var n;
       if (d.Survived === "Dead") {
@@ -272,6 +340,8 @@ function survivedDied() {
     .attr("opacity", 1)
     .attr("width", squareSize1)
     .attr("height", squareSize1)
+    .attr("rx", 3)
+    .attr("ry", 3)
     .attr("stroke-width", strokeWidth1)
     .attr("stroke", "white")
     .attr("fill", "white")
@@ -279,6 +349,18 @@ function survivedDied() {
     .on("click", handleClick)
     .on("mouseout", handleMouseOut);
   died = 1496;
+
+  postCrashTitleDied.text(
+    `Died: ${died.toString()} Souls, ${Math.round(
+      (died * 100) / 2208
+    ).toString()}% of All Passengers`
+  );
+  survived = 712;
+  postCrashTitleSurvived.text(
+    `Survived: ${survived.toString()} Souls, ${Math.round(
+      (survived * 100) / 2208
+    ).toString()}% of All Passengers`
+  );
   
 }
 function init() {
@@ -299,8 +381,8 @@ init();
 
 var row = d3.scaleLinear().domain([0, numSoulRow1]).range([0, width]);
 
-var title_died1 = d3.select("#title_died1");
-var title_survived1 = d3.select("#title_survived1");
+var postCrashTitleDied = d3.select("#post-crash-title-died");
+var postCrashTitleSurvived = d3.select("#post-crash-title-survived")
 
 var postCrashSVG = d3
   .select("#post-crash-area")
@@ -354,17 +436,7 @@ function handleClick(d) {
 function render2() {
   d3.csv("./data/titanic.csv").then(function (data) {
     // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
-    d3.select("#post-crash-title-died").text(
-      `Died: ${died.toString()} Souls, ${Math.round(
-        (died * 100) / 2208
-      ).toString()}% of All Passengers`
-    );
-    survived = 712;
-    d3.select("#post-crash-title-died").text(
-      `Survived: ${survived.toString()} Souls, ${Math.round(
-        (survived * 100) / 2208
-      ).toString()}% of All Passengers`
-    );
+    
   });
 }
 
