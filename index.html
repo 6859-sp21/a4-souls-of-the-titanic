@@ -18,6 +18,12 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <audio id="crashsound">
+      <source src="crash.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="postcrashsound">
+      <source src="postcrashsong.mp3" />
+    </audio>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"
@@ -99,9 +105,41 @@
     <main>
       <section
         id="intro"
-        style="background-image: url('../titanic.jpeg'); height: 125vh"
+        style="
+          background-image: url('../titanic.jpeg');
+          height: 125vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        "
       >
-        <h1 id="title" style="opacity: 0" class="intro__hed">h</h1>
+        <div
+          name="audio-button"
+          style="position: absolute; align-self: flex-end; padding: 30px"
+        >
+          <input type="checkbox" name="un-mute" id="un-mute" />
+          <label for="un-mute" class="unmute">
+            <img
+              src="http://upload.wikimedia.org/wikipedia/commons/3/3f/Mute_Icon.svg"
+              alt="Mute_Icon.svg"
+              title="Mute icon"
+              style="width: 50px; height: 50px"
+              id="unmute"
+            />
+          </label>
+          <label for="un-mute" class="mute">
+            <img
+              src="http://upload.wikimedia.org/wikipedia/commons/2/21/Speaker_Icon.svg"
+              alt="Speaker_Icon.svg"
+              title="Unmute/speaker icon"
+              style="width: 50px; height: 50px"
+              id="mute"
+            />
+          </label>
+          <p style="color: black; font-family: 'Josefin Sans', sans-serif;font-size: 20px;">Click Me</p>
+        </div>
+        </br>
+        </br>
         <h1 id="title" style="color: black" class="intro__hed">
           Souls of the Titanic
         </h1>
@@ -111,9 +149,23 @@
         >
           Start scrolling to explore the real passengers of the Titanic.
         </h3>
+       </br>
+        <h3
+          style="
+            color: rgb(70, 70, 70);
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 20px;
+          "
+        >
+          To optimize viewing experience, use full screen and turn on volume.
+        </h3>
+        <div class="arrow"></div>
       </section>
 
-      <section id="scrolly" style="background-color: #d5d0d0">
+      <section
+        id="scrolly"
+        style="background-color: #d5d0d0; padding-top: 10vh"
+      >
         <article id="pre-crash-article">
           <div class="step" data-step="0">
             <p class="progress">
@@ -237,7 +289,7 @@
               </h2>
             </div>
             <div style="flex: 1; height: 100; width: 3px">
-              <div id="step4" style="height: 0%"></div>
+              <div id="step4" style="height: 0%; max-height: 50%"></div>
             </div>
             <div class="circle" id="circle5">
               <h2
@@ -535,12 +587,39 @@
     <script src="final.js"></script>
     <script src="slides.js"></script>
     <script>
+      var un_mute = document.getElementById("unmute");
+      un_mute.onclick = function () {
+        var song = document.getElementById("postcrashsound");
+        song.play();
+      };
+      var mute = document.getElementById("mute");
+      mute.onclick = function () {
+        var song = document.getElementById("postcrashsound");
+        song.pause();
+      };
+      var arrow = document.getElementsByClassName("arrow")[0];
+      arrow.onclick = function () {
+        var intro = document.getElementById("intro").scrollHeight/2;
+        window.scrollTo({  "top": intro, "behavior": "smooth"});
+        // smoothScroll(arrow);
+      };
+    </script>
+    <script>
       //crash change theme
+      var elmnt = document.getElementById("crash");
       var elmnt2 = document.getElementById("scrolly");
       var elmnt3 = document.getElementById("intro");
       var y = elmnt2.scrollHeight + elmnt3.scrollHeight;
       $(window).on("scroll", function () {
-        if ($(window).scrollTop() > y) {
+        if (
+          $(window).scrollTop() > y &&
+          $(window).scrollTop() < y + elmnt.scrollHeight / 3
+        ) {
+          var audio = document.getElementById("crashsound");
+          audio.volume = 0.07;
+          audio.play();
+          $("#crash").addClass("on-scroll");
+        } else if ($(window).scrollTop() > y) {
           $("#crash").addClass("on-scroll");
         } else {
           $("#crash").removeClass("on-scroll");
