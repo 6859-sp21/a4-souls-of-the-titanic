@@ -60,12 +60,29 @@ h3#title_survived1 {
   font-weight: 500;
 }
 
+
+h3#post-crash-title-died{
+  color:whitesmoke;
+  font-size: 25px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 500;
+}
+
+h3#post-crash-title-survived{
+  color:whitesmoke;
+  font-size: 25px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 500;
+}
+
 h3#activeFilterTitle {
   color:whitesmoke;
   font-size: 20px;
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 500;
 }
+
+
 
 #splide {
   width: 100px;

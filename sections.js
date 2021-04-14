@@ -25,7 +25,7 @@ var step = article.selectAll(".step");
 var crash = article.selectAll("#crash");
 
 var rawData;
-d3.csv("data/titanic.csv").then(function (data) {
+d3.csv("./data/titanic.csv").then(function (data) {
   rawData = data;
 });
 
@@ -430,7 +430,7 @@ function handleClick(d) {
                         } class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
 }
 function render1() {
-  d3.csv("data/titanic.csv").then(function (data) {
+  d3.csv("./data/titanic.csv").then(function (data) {
     // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
     d3.select("#title_died1").text(`Titanic: 2208 Souls`);
 

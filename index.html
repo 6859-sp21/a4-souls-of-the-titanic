@@ -4,16 +4,16 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Souls of the Titanic</title>
-    <meta name="description" content="Scrollama: Sticky Side Example" />
+    <meta name="description" content="Souls of the Titanic" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="./style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;500;700&family=Limelight&display=swap"
       rel="stylesheet"
     />
 
     <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
-    <script src="../node_modules/scrollama/build/scrollama.min.js"></script>
+    <script src="./node_modules/scrollama/build/scrollama.min.js"></script>
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
@@ -291,14 +291,15 @@
             <p>Last Step</p>
           </div>
         </article>
-        <figure id="post-crash-figure" style="margin-left: 50px">
-          <div style="justify-content: row; display: flex">
-            <h3
-              id="title_died1"
+        <figure id="post-crash-figure" style="margin-left: 50px; flex-direction: row; display: flex">
+          <div style="flex-direction: column; display: flex">
+            <div style="flex-direction: row; display: flex">
+              <h3
+              id="post-crash-title-died"
               style="color: white; font-size: 20px; width: 600px"
             ></h3>
-            <h3 id="title_survived1" style="color: white; font-size: 20px"></h3>
-          </div>
+            <h3 id="post-crash-title-survived" style="color: white; font-size: 20px"></h3>
+            </div>
           <div id="post-crash-area"></div>
         </figure>
       </section>
