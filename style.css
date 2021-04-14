@@ -1,5 +1,5 @@
 h1#title {
-    font-size: 50px;
+    font-size: 82px;
     font-family: 'Limelight', cursive;
     color:white;
 }
@@ -420,6 +420,8 @@ a:hover {
   justify-content: center;
   display: flex;
   padding-top: 200px; 
+  padding-left: 50px;
+  padding-right: 50px;
   padding-bottom: 500px; 
   height: 125vh;
 
@@ -610,7 +612,7 @@ figure p {
 .arrow {
   width: 40px;
   height: 40px;
-  top: 30%;
+  top: 32%;
   margin: -20px 0 0 -20px;
   -webkit-transform: rotate(45deg);
   border-left: none;
@@ -623,7 +625,7 @@ figure p {
   content: "";
   width: 20px;
   height: 20px;
-  top: 30%;
+  top: 32%;
   margin: -3px 0 0 -10px;
   border-left: none;
   border-top: none;
