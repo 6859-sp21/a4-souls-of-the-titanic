@@ -4,16 +4,16 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Souls of the Titanic</title>
-    <meta name="description" content="Scrollama: Sticky Side Example" />
+    <meta name="description" content="Souls of the Titanic" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="./style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;500;700&family=Limelight&display=swap"
       rel="stylesheet"
     />
 
     <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
-    <script src="../node_modules/scrollama/build/scrollama.min.js"></script>
+    <script src="./node_modules/scrollama/build/scrollama.min.js"></script>
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
@@ -106,7 +106,7 @@
       <section
         id="intro"
         style="
-          background-image: url('../titanic.jpeg');
+          background-image: url('./titanic.jpeg');
           height: 125vh;
           display: flex;
           flex-direction: column;
@@ -170,31 +170,37 @@
           <div class="step" data-step="0">
             <p class="progress">
               Each square represents a passenger on the Titanic. Hover over each
-              square to learn more about each passenger. ____ came on Belfast
+              square to learn more. 
+              This square represents Dorothy Gibson, the real life figure who inspired Rose from the Titanic movie.
             </p>
           </div>
           <div class="step" data-step="1">
-            <p># Passenger boarded at Southampton</p>
+            <p class="progress">
+              The Titanic was built in Belfast, and crew members departed there before the official journey began.
+            </p>
           </div>
           <div class="step" data-step="2">
-            <p># Passenger boarded at Cherbourg</p>
+            <p> 
+              The Titanic departed from Southampton, England on its maiden voyage across the Atlantic Ocean. 
+            </p>
           </div>
           <div class="step" data-step="3">
-            <p># Passenger boarded at Queenstown</p>
+            <p>
+              The Titanic stopped in Cherbourg, France to pick up passengers.
+            </p>
           </div>
           <div class="step" data-step="4">
-            <p>Overall, ____ % class, crew members</p>
+            <p> Finally, the Titanic stopped in Queenstown, Ireland to pick up its last passengers before heading to New York City</p>
           </div>
-
-          <div class="step" data-step="10">
+          <div class="step" data-step="5">
+            <p> 3rd class passengers was the largest source of the Titanic's profit and were over half of the passengers. </p>
+          </div>
+          <div class="step" data-step="6">
             <p>Last step</p>
           </div>
         </article>
 
-        <!-- <figure id="pre-crash-figure" style="margin-left: 50px">
-          <div style="justify-content: row; display: flex"></div>
-          <div id="area"></div>
-        </figure> -->
+    
         <figure
           id="pre-crash-figure"
           style="margin-left: 50px; flex-direction: row; display: flex"
@@ -319,10 +325,10 @@
       <section id="post-crash-scrolly">
         <article id="post-crash-article">
           <div class="step" data-step="6">
-            <p>Over 1500 people died on the Titanic.</p>
+            <p> There were only 16 lifeboats on the Titanic, and 4 collapsible lifeboats with a total capacity of 1178.</p>
           </div>
           <div class="step" data-step="7">
-            <p>During the crash, musicans never stopped playing.</p>
+            <p>The musicians made no attempt to save themselves, playing “Nearer, My God, to Thee” to calm people down as the ship was sinking.  </p>
           </div>
           <div class="step" data-step="8">
             <p>
@@ -331,20 +337,21 @@
             </p>
           </div>
           <div class="step" data-step="9">
-            <p>Women and children</p>
+            <p>Although women and children were required on lifeboats first, because of the disorderly process, many of the victims were women and children. </p>
           </div>
           <div class="step" data-step="9">
             <p>Last Step</p>
           </div>
         </article>
-        <figure id="post-crash-figure" style="margin-left: 50px">
-          <div style="justify-content: row; display: flex">
-            <h3
-              id="title_died1"
+        <figure id="post-crash-figure" style="margin-left: 50px; flex-direction: row; display: flex">
+          <div style="flex-direction: column; display: flex">
+            <div style="flex-direction: row; display: flex">
+              <h3
+              id="post-crash-title-died"
               style="color: white; font-size: 20px; width: 600px"
             ></h3>
-            <h3 id="title_survived1" style="color: white; font-size: 20px"></h3>
-          </div>
+            <h3 id="post-crash-title-survived" style="color: white; font-size: 20px"></h3>
+            </div>
           <div id="post-crash-area"></div>
         </figure>
       </section>

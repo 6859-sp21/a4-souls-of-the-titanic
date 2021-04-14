@@ -14,7 +14,7 @@ var m = { top: 5, right: 5, bottom: 30, left: 0 };
 var nsrow = 35;
 
 var rawData;
-d3.csv("data/titanic.csv").then(function (data) {
+d3.csv("./data/titanic.csv").then(function (data) {
   rawData = data;
 });
 
@@ -23,7 +23,7 @@ var scroller = scrollama();
 function handleResize() {
   // 1. update height of step elements
   var stepH = Math.floor(window.innerHeight * 0.25);
-  step.style("height", stepH + "px");
+  postCrashStep.style("height", stepH + "px");
 
   var figureHeight = window.innerHeight * 0.8;
   var figureMarginTop = (window.innerHeight - figureHeight) / 2;
@@ -54,19 +54,24 @@ function womenAndChildrenVis() {
   var ax_ind = 0;
   var dy_ind = 0;
   var ay_ind = 0;
-
-  womenAndChildren = rawData.filter(
-    (d) => d.Sex == "Female" || d.Adut_or_Chld == "Child"
-  );
-  womenAndChildrenRest = rawData.filter(
-    (d) => !(d.Sex == "Female" || d.Adut_or_Chld == "Child")
-  );
-
-  sortedwomenAndChildren = womenAndChildren.concat(womenAndChildrenRest);
-
+  
   postCrashSVG
     .selectAll("rect")
-    .data(sortedwomenAndChildren)
+    .sort(function (a, b) {
+      if (
+        (a.Sex == "Female" || a.Adut_or_Chld == "Child") &&
+        !(b.Sex == "Female" || b.Adut_or_Chld == "Child")
+      ) {
+        return -1;
+      } else if (
+        !(a.Sex == "Female" || a.Adut_or_Chld == "Child") &&
+        (b.Sex == "Female" || b.Adut_or_Chld == "Child")
+      ) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
     .attr("x", (d, i) => {
       var n;
       if (d.Survived === "Dead") {
@@ -90,8 +95,6 @@ function womenAndChildrenVis() {
         return row(n);
       }
     })
-    .transition()
-    .duration(700)
     .attr("fill", (d) => {
       if (d.Survived == "Alive") {
         return d.Sex == "Female" || d.Adut_or_Chld == "Child"
@@ -114,6 +117,7 @@ function womenAndChildrenVis() {
           : "dead-inactive";
       }
     });
+    postCrashSVG.exit().remove()
 }
 function firstClassVis() {
   var dx_ind = 0;
@@ -128,7 +132,15 @@ function firstClassVis() {
 
   postCrashSVG
     .selectAll("rect")
-    .data(sortedFirst)
+    .sort(function (a, b) {
+      if (a.Class == "1" && b.Class != "1") {
+        return -1;
+      } else if (a.Class != "1" && b.Class == "1") {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
     .attr("x", (d, i) => {
       var n;
       if (d.Survived === "Dead") {
@@ -152,8 +164,6 @@ function firstClassVis() {
         return row(n);
       }
     })
-    .transition()
-    .duration(700)
     .attr("fill", (d) => {
       if (d.Survived == "Alive") {
         return d.Class == "1" ? survivedColor : highlightColor;
@@ -175,14 +185,17 @@ function musicianVis() {
   var dy_ind = 0;
   var ay_ind = 0;
 
-  musicians = rawData.filter((d) => d.Job == "Musician");
-  rest = rawData.filter((d) => d.Job != "Musician");
-
-  sortedMusicians = musicians.concat(rest);
-
   postCrashSVG
     .selectAll("rect")
-    .data(sortedMusicians)
+    .sort(function (a, b) {
+      if (a.Job == "Musician" && b.Job != "Musician") {
+        return -1;
+      } else if (a.Job != "Musician" && b.Job == "Musician") {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
     .attr("x", (d, i) => {
       var n;
       if (d.Survived === "Dead") {
@@ -206,8 +219,6 @@ function musicianVis() {
         return row(n);
       }
     })
-    .transition()
-    .duration(700)
     .attr("fill", (d) => {
       return d.Job == "Musician" ? diedColor : highlightColor;
     })
@@ -224,6 +235,9 @@ function survivedDied() {
   var ax_ind = 0;
   var dy_ind = 0;
   var ay_ind = 0;
+  
+  postCrashSVG.selectAll("rect").attr("fill", "white");
+  console.log(postCrashSVG.selectAll("rect"));
   postCrashSVG
     .selectAll("rect")
     .data(rawData)
@@ -260,21 +274,12 @@ function survivedDied() {
     .attr("height", squareSize1)
     .attr("stroke-width", strokeWidth1)
     .attr("stroke", "white")
-    .attr("fill", "white");
-  postCrashSVG.selectAll("rect");
-  // died = data.filter(d => d.Survived === "Dead")
+    .attr("fill", "white")
+    .on("mouseover", handleMouseOver)
+    .on("click", handleClick)
+    .on("mouseout", handleMouseOut);
   died = 1496;
-  d3.select("#title_died1").text(
-    `Died: ${died.toString()} Souls, ${Math.round(
-      (died * 100) / 2208
-    ).toString()}% of All Passengers`
-  );
-  survived = 712;
-  d3.select("#title_survived1").text(
-    `Survived: ${survived.toString()} Souls, ${Math.round(
-      (survived * 100) / 2208
-    ).toString()}% of All Passengers`
-  );
+  
 }
 function init() {
   handleResize();
@@ -347,9 +352,19 @@ function handleClick(d) {
                         } class="button1" target="blank">Hear My Story from Encyclopedia Titanica</a></div>`);
 }
 function render2() {
-  d3.csv("data/titanic.csv").then(function (data) {
+  d3.csv("./data/titanic.csv").then(function (data) {
     // sorted_data = data.sort((d1, d2) => (d1.Class > d2.Class) ? 1 : -1);
-    d3.select("#title_died1").text(`Titanic: 2208 Souls`);
+    d3.select("#post-crash-title-died").text(
+      `Died: ${died.toString()} Souls, ${Math.round(
+        (died * 100) / 2208
+      ).toString()}% of All Passengers`
+    );
+    survived = 712;
+    d3.select("#post-crash-title-died").text(
+      `Survived: ${survived.toString()} Souls, ${Math.round(
+        (survived * 100) / 2208
+      ).toString()}% of All Passengers`
+    );
   });
 }
 
